@@ -85,6 +85,18 @@ public class CollectService extends Service {
     protected Context context;
 
     /**
+     * Socket
+     */
+    protected static WebSocketDataListener ws;
+
+    /**
+     * boolean to tell whether Collect with Post/Websocket is Active
+     */
+    protected static boolean isPostActive;
+
+    //protected static WebSocketJetty webSocket;
+
+    /**
      * Empty constructor
      */
     public CollectService() {
@@ -127,17 +139,22 @@ public class CollectService extends Service {
     private void startCollectService() {
         // Initialisation
         int limit;
-        context = getApplicationContext();
+        context = this;
         sensorService = new SensorService();
         locationService = new LocationService();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        this.url = sharedPreferences.getString("url", "NULL");
         this.token = sharedPreferences.getString("token", "NULL");
         this.prefixGts = sharedPreferences.getString("prefix", "NULL");
         List<String> sensorName = WarpActivity.getSensorsCheckedBefore(sharedPreferences);
         ArrayList<CharSequence> sensorNameList = new ArrayList<>();
         sensorNameList.addAll(sensorName);
         this.flushTime = Integer.valueOf(sharedPreferences.getString("flush", "60"));
+        this.isPostActive = sharedPreferences.getBoolean("postWS", true);
+        if(isPostActive) {
+            this.url = sharedPreferences.getString("url", "NULL");
+        } else {
+            this.url = sharedPreferences.getString("urlWS", "NULL");
+        }
         boolean useNet = sharedPreferences.getBoolean("useInternet", true);
         limit = Integer.valueOf(sharedPreferences.getString("limitSizeDisk", "100"));
         boolean mode = sharedPreferences.getBoolean("keepValues",false);
@@ -185,12 +202,27 @@ public class CollectService extends Service {
      * @param sensorNameList
      */
     private void startServices(ArrayList<CharSequence> sensorNameList) {
+        //String urlWebService = "wss://warp1.cityzendata.net/api/v0/streamupdate";
+        //String valToken = this.token;
+        if (!isPostActive) {
+            ws = new WebSocketDataListener(this.url, this.token);
+            ws.connectWebSocket();
+        }
+        /*webSocket = new WebSocketJetty(urlWebService,this.token);
+        try {
+            webSocket.connect();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+
+
         if(sensorNameList != null && !sensorNameList.isEmpty()) {
             for(CharSequence sensorName : sensorNameList) {
                 sensorService.startActionStart(context, sensorName.toString(), prefixGts);
             }
         }
         locationService.startActionStart(context, sensorNameList, prefixGts);
+        //FlushWithSocket.connectWebSocket(urlWebService,this.token);
     }
 
     /**
@@ -204,6 +236,7 @@ public class CollectService extends Service {
             Intent intent = new Intent(context, LocationService.class);
             stopService(intent);
         }
+        //webSocket.closeSockets();
     }
 
     /**
@@ -261,7 +294,7 @@ public class CollectService extends Service {
      */
     public void onDestroy () {
         // update context
-        context = getApplicationContext();
+        context = this;
         if(isRunning)
         {
             // Stop timer

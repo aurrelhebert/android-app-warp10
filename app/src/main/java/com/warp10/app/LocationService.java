@@ -145,7 +145,7 @@ public class LocationService extends Service {
      * @param intent
      */
     protected void handleCommand(Intent intent) {
-        if (intent != null) {
+        if (null != intent) {
             final String action = intent.getAction();
             if (ACTION_START.equals(action)) {
                 final Boolean isListenGPS = intent.getBooleanExtra(EXTRA_LISTGPS, false);
@@ -180,7 +180,7 @@ public class LocationService extends Service {
                     //Log.d("GPSLOCA",location.toString());
                     long timestamp = System.currentTimeMillis() * 1000;
                     // If buffer have full size
-                    if (stringBuffer == null) {
+                    if (null == stringBuffer) {
                         stringBuffer = new StringBuffer();
                     }
                     if (stringBuffer.length() >= BUFFER_SIZE) {
@@ -221,10 +221,14 @@ public class LocationService extends Service {
              * empty current buffer
              */
             public void emptyBuffer() {
-                if (stringBuffer != null) {
+                if (null != stringBuffer) {
                     //Log.d("LocationService", stringBuffer.toString());
                     final StringBuffer buffer = new StringBuffer(stringBuffer);
-                    FileService.writeToFile(buffer.toString(), context);
+                    if(CollectService.isPostActive) {
+                        FileService.writeToFile(buffer.toString(), context);
+                    } else {
+                        CollectService.ws.writeData(buffer.toString());
+                    }
                     stringBuffer = new StringBuffer();
                 }
             }
@@ -279,7 +283,7 @@ public class LocationService extends Service {
      */
     public static Location getLastLocation(boolean isListenGPS, boolean isListenNetWork) {
         Location mLastLocation = null;
-        if (locManager != null) {
+        if (null != locManager) {
             if (isListenGPS) {
                 if (locManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -310,7 +314,7 @@ public class LocationService extends Service {
      */
     public void onDestroy () {
         if(isRunning) {
-            if (locationManager != null) {
+            if (null != locationManager) {
                 locationListener.onProviderDisabled(LocationManager.NETWORK_PROVIDER);
                 locationManager.removeUpdates(locationListener);
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

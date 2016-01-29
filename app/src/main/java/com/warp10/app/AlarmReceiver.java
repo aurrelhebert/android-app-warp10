@@ -58,6 +58,9 @@ public class AlarmReceiver extends BroadcastReceiver
             SharedPreferences.Editor ed = sharedPrefs.edit();
             ed.putBoolean("isActive", false);
             ed.commit();
+            if(!CollectService.isPostActive) {
+                CollectService.ws.closeWebSocket();
+            }
         }
     }
 }

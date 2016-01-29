@@ -120,6 +120,7 @@ public class SensorService extends IntentService implements SensorEventListener 
 
 
 
+
     /**
      * Connection with the location Service
      */
@@ -200,6 +201,7 @@ public class SensorService extends IntentService implements SensorEventListener 
                 .getDefaultSharedPreferences(this);
         initialiseHashMap(sharedPrefs);
         createMapSensorType();
+        //wsDL = new WebSocketDataListener(sharedPrefs.getString("url", "NULL"),sharedPrefs.getString("token", "NULL"));
     }
 
     protected void setUpMap()
@@ -428,7 +430,15 @@ public class SensorService extends IntentService implements SensorEventListener 
         if (stringBuffer != null) {
             //Log.d("SensorService", stringBuffer.toString());
             final StringBuffer buffer = new StringBuffer(stringBuffer);
-            FileService.writeToFile(buffer.toString(), this);
+            if (CollectService.isPostActive) {
+                FileService.writeToFile(buffer.toString(), this);
+            } else {
+                CollectService.ws.writeData(buffer.toString());
+            }
+            //FlushWithSocket.writeValues(buffer.toString());
+            //Log.d("Buffer", buffer.toString());
+
+            //CollectService.webSocket.writeMessage(buffer.toString());
             stringBuffer = new StringBuffer();
         }
     }
