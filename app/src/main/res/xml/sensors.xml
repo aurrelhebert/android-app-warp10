@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="sensorPrefScreen">
+
+    <com.warp10.app.AddSensorPreference
+        android:id="@+id/addSensorsDesc"
+        android:key="addSensorsDesc"
+        android:title="Add a sensor description" />
+
+    <com.warp10.app.SensorPreference
+        android:id="@+id/accelerometer"
+        android:key="accelerometer"
+        android:title="accelerometer"
+        android:persistent="true"
+        android:defaultValue="@string/accelerometer" />
+
+    <com.warp10.app.SensorPreference
+        android:id="@+id/magneticField"
+        android:key="magneticField"
+        android:title="magnetic field"
+        android:persistent="true"
+        android:defaultValue="@string/magneticField" />
+
+    <com.warp10.app.SensorPreference
+        android:id="@+id/gyroscope"
+        android:key="gyroscope"
+        android:title="gyroscope"
+        android:persistent="true"
+        android:defaultValue="@string/gyroscope" />
+
+    <com.warp10.app.SensorPreference
+        android:id="@+id/gravity"
+        android:key="gravity"
+        android:title="gravity"
+        android:persistent="true"
+        android:defaultValue="@string/gravity" />
+
+    <com.warp10.app.SensorPreference
+        android:id="@+id/linearAcceleration"
+        android:key="linearAcceleration"
+        android:title="linear acceleration"
+        android:persistent="true"
+        android:defaultValue="@string/linearAcceleration" />
+
+    <com.warp10.app.SensorPreference
+        android:id="@+id/rotationVector"
+        android:key="rotationVector"
+        android:title="rotation vector"
+        android:persistent="true"
+        android:defaultValue="@string/rotationVector" />
+
+    <com.warp10.app.SensorPreference
+        android:id="@+id/orientation"
+        android:key="orientation"
+        android:title="orientation"
+        android:persistent="true"
+        android:defaultValue="@string/orientation" />
+
+    <com.warp10.app.SensorPreference
+        android:id="@+id/magneticFieldUncalibrated"
+        android:key="magneticFieldUncalibrated"
+        android:title="magnetic field uncalibrated"
+        android:persistent="true"
+        android:defaultValue="@string/magneticFieldUncalibrated" />
+
+    <com.warp10.app.SensorPreference
+        android:id="@+id/gameRotationVector"
+        android:key="gameRotationVector"
+        android:title="game rotation vector"
+        android:persistent="true"
+        android:defaultValue="@string/gameRotationVector" />
+
+    <com.warp10.app.SensorPreference
+        android:id="@+id/gyroscopeUncalibrated"
+        android:key="gyroscopeUncalibrated"
+        android:title="gyroscope uncalibrated"
+        android:persistent="true"
+        android:defaultValue="@string/gyroscopeUncalibrated" />
+</PreferenceScreen>

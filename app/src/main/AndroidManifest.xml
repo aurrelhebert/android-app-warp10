@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.warp10.app">
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name="com.warp10.app.WarpActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name="com.warp10.app.AlarmReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name="com.warp10.app.AlarmFlushData"
+            android:exported="false" />
+
+        <activity
+            android:name="com.warp10.app.SetPreferenceActivity"
+            android:label="@string/app_name" />
+
+        <activity
+            android:name="com.warp10.app.SetSensorsActivity"
+            android:label="@string/app_name" />
+
+        <service
+            android:name="com.warp10.app.SensorService"
+            android:exported="false" />
+        <service
+            android:name="com.warp10.app.LocationService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name="com.warp10.app.CollectService"
+            android:enabled="true"
+            android:exported="true" />
+
+    </application>
+
+</manifest>

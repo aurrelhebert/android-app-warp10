@@ -1,0 +1,28 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.warp10.app.WarpActivity">
+
+    <item android:id="@+id/settings"
+        android:title="Settings"
+        android:onClick="menuOnSettingsClick"/>
+    <item android:id="@+id/flush"
+        android:title="Flush all files"
+        android:onClick="menuOnFlushClick"/>
+    <item android:id="@+id/flushFileDuringCollect"
+        android:title="Flush files during collect"
+        android:onClick="menuOnFlushDuringCollectClick"/>
+    <item android:id="@+id/delete"
+        android:title="Delete files"
+        android:onClick="menuOnDeleteClick"/>
+    <item android:id="@+id/readLog"
+        android:title="Read log file"
+        android:onClick="menuOnReadLogClick"/>
+    <item android:id="@+id/cleanLog"
+        android:title="Clean log file"
+        android:onClick="menuOnCleanLogClick"/>
+    <item android:id="@+id/sensorsDesc"
+        android:title="Sensors Description"
+        android:onClick="menuOnSensorsDesClick"/>
+        <!-- "file" submenu -->
+</menu>

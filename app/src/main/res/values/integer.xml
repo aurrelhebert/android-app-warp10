@@ -1,0 +1,4 @@
+<resources>
+    <integer name="flushValue">60</integer>
+    <integer name="limitSizeValue">100</integer>
+</resources>
