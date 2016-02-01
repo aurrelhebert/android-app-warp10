@@ -26,8 +26,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -73,6 +75,7 @@ public class FlushService {
                        //Log.d("POSTDATA", warpUrl + " " + warpToken);
                        //String txt = FileService.readFile(tmpFile);
                        //Log.d("FLUSH THREAD", warpUrl);
+                       //FileService.writeLogFile("File: " + tmpFile.getName() + "\n");
                        if (postData(tmpFile, warpUrl, warpToken)) {
                            tmpFile.delete();
                        } else {
@@ -145,7 +148,7 @@ public class FlushService {
             con.setRequestMethod("POST");
             con.setDoInput(true);
             con.setDoOutput(true);
-            con.setRequestProperty("X-CityzenData-Token", token);
+            con.setRequestProperty("X-Warp10-Token", token);
             con.setRequestProperty("Content-Type", "text/plain");
             con.setChunkedStreamingMode(16384);
             //OutputStream os = con.getOutputStream();
@@ -173,6 +176,7 @@ public class FlushService {
                     issue = con.getResponseMessage();
                     Log.d("Value Issue", issue);
                 }
+                issue = con.getResponseMessage();
             }
 
             if(200 == responseCode)
@@ -246,7 +250,8 @@ public class FlushService {
     public static boolean postData(File file, String url, String token) {
         // Create a new HttpClient and Post Header
         URL obj = null;
-        HttpsURLConnection con = null;
+        //HttpsURLConnection conHTTPS = null;
+        HttpURLConnection con = null;
         OutputStream os = null;
         GZIPOutputStream out = null;
         //Log.d("URLINSIDE", url + " " + token );
@@ -254,16 +259,19 @@ public class FlushService {
         try {
             // connect to url and set header
             obj = new URL(url);
-            con  = (HttpsURLConnection) obj.openConnection();
+            if(url.contains("https")) {
+                con = (HttpsURLConnection) obj.openConnection();
+            } else {
+                con = (HttpURLConnection) obj.openConnection();
+            }
             con.setRequestMethod("POST");
             con.setDoInput(true);
             con.setDoOutput(true);
-            con.setRequestProperty("X-CityzenData-Token", token);
+            con.setRequestProperty("X-Warp10-Token", token);
             con.setRequestProperty("Content-Type", "application/gzip");
             con.setChunkedStreamingMode(16384);
 
             con.connect();
-
             // Read data inside file
             FileInputStream fileIn = new FileInputStream(file);
             GZIPInputStream gZIPInputStream = new GZIPInputStream(fileIn);
@@ -287,18 +295,21 @@ public class FlushService {
             //Log.d("URLINSIDE", "CONNECT");
             //pw.println(sb.toString());
             int responseCode = con.getResponseCode();
-
+            String responseMessage = con.getResponseMessage();
             Log.d("URLINSIDE", "RESPONSECODE");
             if (200 != responseCode) {
-                String responseMessage = con.getResponseMessage();
+
                 Log.d("Code ", "" + responseCode);
                 Log.d("Code ", responseMessage);
                 FileService.writeLogFile("Code: " + responseCode + "message: " + responseMessage);
+                //issue = responseMessage;
+
                 if(500 == responseCode){
                     issue = responseMessage;
                 }
             }
-
+            //FileService.writeLogFile("Code: " + con.getResponseCode() + "message: " + con.getResponseMessage());
+            //issue = responseMessage;
             if(200 == responseCode)
             {
                 returnValue = true;
@@ -312,11 +323,14 @@ public class FlushService {
                 response.append(inputLine);
             }*/
         } catch (MalformedURLException e) {
+            FileService.writeLogFile(e.toString());
             e.printStackTrace();
         } catch (IOException e) {
+            FileService.writeLogFile(e.toString());
             e.printStackTrace();
         } catch (Exception e)
         {
+            FileService.writeLogFile(e.toString());
             e.printStackTrace();
         } finally {
             if(con != null) {

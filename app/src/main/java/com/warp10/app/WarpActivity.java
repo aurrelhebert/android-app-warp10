@@ -376,6 +376,7 @@ public class WarpActivity extends AppCompatActivity implements SharedPreferences
         }
         String url = sharedPrefs.getString("url", "NULL");
         String token = sharedPrefs.getString("token","NULL");
+        //FlushService.sendNotification(this, url, token);
         FlushService.flushAllFiles("fill", context, url, token, true);
     }
 
