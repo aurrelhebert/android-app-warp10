@@ -11,6 +11,15 @@
         android:defaultValue="@string/warpUrlValue" />
 
     <EditTextPreference
+        android:id="@+id/urlWS"
+        android:key="urlWS"
+        android:title="@string/urlWSTitle"
+        android:persistent="true"
+        android:dialogTitle="@string/urlWSTitle"
+        android:dialogMessage="@string/urlWSMessage"
+        android:defaultValue="@string/urlWSValue" />
+
+    <EditTextPreference
         android:id="@+id/token"
         android:key="token"
         android:title="@string/tokenTitle"
@@ -43,6 +52,12 @@
         android:key="useInternet"
         android:title="Activate automatic post on internet during collect"
         android:dialogMessage="@string/useInternetMessage"
+        android:defaultValue="true" />
+
+    <CheckBoxPreference
+        android:id="@+id/postWS"
+        android:key="postWS"
+        android:title="If true use POST, false use WebSocket"
         android:defaultValue="true" />
 
     <CheckBoxPreference

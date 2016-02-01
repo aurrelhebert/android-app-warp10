@@ -76,6 +76,7 @@ public class FlushService {
                        //String txt = FileService.readFile(tmpFile);
                        //Log.d("FLUSH THREAD", warpUrl);
                        //FileService.writeLogFile("File: " + tmpFile.getName() + "\n");
+
                        if (postData(tmpFile, warpUrl, warpToken)) {
                            tmpFile.delete();
                        } else {

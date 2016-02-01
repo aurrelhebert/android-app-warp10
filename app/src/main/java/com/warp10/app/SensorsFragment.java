@@ -37,7 +37,7 @@ public class SensorsFragment extends PreferenceFragment {
      * All the sharedPreferences not related to sensors description
      */
     public static List<String> preferencesList = Arrays.asList("checkedGTS", "token", "url", "isActive", "useInternet",
-            "prefix", "flush", "keepValues", "limitSizeDisk");
+            "prefix", "flush", "keepValues", "limitSizeDisk", "urlWS", "postWS");
 
     /**
      * Method on Create

@@ -249,7 +249,7 @@ public class SensorPreference extends DialogPreference {
      * @param title
      */
     protected void saveValue(String value, String title) {
-        if(attr == null) {
+        if(null == attr) {
             SharedPreferences sharedPreferences = PreferenceManager
                     .getDefaultSharedPreferences(getContext());
             sharedPreferences.edit().putString(getKey(), value).commit();
@@ -337,7 +337,7 @@ public class SensorPreference extends DialogPreference {
      */
     protected void onRestoreInstanceState(Parcelable state) {
         // Check whether we saved the state in onSaveInstanceState
-        if (state == null || !state.getClass().equals(SavedState.class)) {
+        if (null == state || !state.getClass().equals(SavedState.class)) {
             // Didn't save the state, so call superclass
             super.onRestoreInstanceState(state);
             return;
