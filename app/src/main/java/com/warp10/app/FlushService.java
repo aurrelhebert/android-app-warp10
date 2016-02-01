@@ -260,9 +260,9 @@ public class FlushService {
         try {
             // connect to url and set header
             obj = new URL(url);
-            if(url.contains("https")) {
+            if(url.startsWith("https")) {
                 con = (HttpsURLConnection) obj.openConnection();
-            } else {
+            } else if (url.startsWith("http")){
                 con = (HttpURLConnection) obj.openConnection();
             }
             con.setRequestMethod("POST");

@@ -82,12 +82,12 @@ public class WebSocketDataListener {
     }
 
 
-    public WebSocketDataListener(String cityzenDataBaseURI, String token) {
+    public WebSocketDataListener(String url, String token) {
         try {
             this.token = token;
-            uri = new URI(cityzenDataBaseURI);
+            uri = new URI(url);
         } catch (URISyntaxException e) {
-            Log.e("CZD Websocket", "Bad URI " + cityzenDataBaseURI);
+            Log.e("CZD Websocket", "Bad URI " + url);
             return;
         }
         this.webSocketClient = new SecureWebSocket(uri, new Draft_17());
@@ -111,19 +111,24 @@ public class WebSocketDataListener {
         //headers.put("token",token);
 
         try {
-            SSLContext sslContext = null;
-            try {
-                sslContext = SSLContext.getInstance("TLS");
-                sslContext.init(null, null, null); // will use java's default key and trust store which is sufficient unless you deal with self-signed certificates
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            } catch (KeyManagementException e) {
-                e.printStackTrace();
-            }
-            webSocketClient.setWebSocketFactory(new DefaultSSLWebSocketClientFactory(sslContext));
+            if(uri.getPath().startsWith("wss")) {
+                SSLContext sslContext = null;
+                try {
+                    sslContext = SSLContext.getInstance("TLS");
+                    sslContext.init(null, null, null); // will use java's default key and trust store which is sufficient unless you deal with self-signed certificates
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (KeyManagementException e) {
+                    e.printStackTrace();
+                }
+                webSocketClient.setWebSocketFactory(new DefaultSSLWebSocketClientFactory(sslContext));
 
-            boolean retur = webSocketClient.connectBlocking();
-            Log.d("CZD Websocket", "return " + retur);
+                boolean retur = webSocketClient.connectBlocking();
+                //Log.d("CZD Websocket", "return " + retur);
+            }
+            else if (uri.getPath().startsWith("ws")){
+                webSocketClient.connectBlocking();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
