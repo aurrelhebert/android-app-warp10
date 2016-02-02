@@ -59,7 +59,8 @@ public class AlarmReceiver extends BroadcastReceiver
             ed.putBoolean("isActive", false);
             ed.commit();
             if(!CollectService.isPostActive) {
-                CollectService.ws.closeWebSocket();
+                //TODO clean
+                //FileService.setContext(context);
             }
         }
     }

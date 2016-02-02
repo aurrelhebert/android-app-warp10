@@ -94,6 +94,7 @@ public class CollectService extends Service {
      */
     protected static boolean isPostActive;
 
+    protected static boolean isClosed;
     //protected static WebSocketJetty webSocket;
 
     /**
@@ -205,8 +206,9 @@ public class CollectService extends Service {
         //String urlWebService = "wss://warp1.cityzendata.net/api/v0/streamupdate";
         //String valToken = this.token;
         if (!isPostActive) {
+            //FileService.setContext(getApplicationContext());
             ws = new WebSocketDataListener(this.url, this.token);
-            ws.connectWebSocket();
+            //ws.connectWebSocket();
         }
         /*webSocket = new WebSocketJetty(urlWebService,this.token);
         try {
@@ -235,6 +237,10 @@ public class CollectService extends Service {
         if(LocationService.isRunning) {
             Intent intent = new Intent(context, LocationService.class);
             stopService(intent);
+        }
+        if(!isPostActive) {
+            //FileService.setContext(getApplicationContext());
+            CollectService.ws.closeWebSocket();
         }
         //webSocket.closeSockets();
     }

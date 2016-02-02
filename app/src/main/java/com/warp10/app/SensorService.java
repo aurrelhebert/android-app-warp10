@@ -33,6 +33,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Pair;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -433,7 +434,16 @@ public class SensorService extends IntentService implements SensorEventListener 
             if (CollectService.isPostActive) {
                 FileService.writeToFile(buffer.toString(), this);
             } else {
-                CollectService.ws.writeData(buffer.toString());
+                if(CollectService.ws.isClosed()) {
+                    FileService.writeToFile(buffer.toString(), this);
+                } else {
+                    List<File> allFiles = FileService.getAllFiles("fill", this, true);
+                    for (File file:allFiles) {
+                        String data = FileService.readMetricFile(file);
+                        CollectService.ws.writeData(data);
+                    }
+                    CollectService.ws.writeData(buffer.toString());
+                }
             }
             //FlushWithSocket.writeValues(buffer.toString());
             //Log.d("Buffer", buffer.toString());

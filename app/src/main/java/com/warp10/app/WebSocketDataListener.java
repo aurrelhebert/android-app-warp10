@@ -47,6 +47,11 @@ public class WebSocketDataListener {
 
     private URI uri;
     private String token;
+    private boolean closed = true;
+
+    public boolean isClosed() {
+        return closed;
+    }
 
     private class SecureWebSocket extends WebSocketClient {
 
@@ -56,6 +61,7 @@ public class WebSocketDataListener {
 
         public void onOpen(ServerHandshake serverHandshake) {
             Log.i("CZD Websocket", "Opened");
+            //FileService.writeLogFile("TOKEN" + "\n");
             webSocketClient.send("TOKEN " + token);
         }
 
@@ -72,12 +78,14 @@ public class WebSocketDataListener {
         @Override
         public void onClose(int i, String s, boolean b) {
             Log.i("CZD Websocket", "Closed " + s);
+            //FileService.writeLogFile("Socket closed" + "\n");
             webSocketClient = null;
         }
 
         @Override
         public void onError(Exception e) {
             Log.i("CZD Websocket", "Error " + e.getMessage());
+            //FileService.writeLogFile(e.getMessage());
         }
     }
 
@@ -90,13 +98,21 @@ public class WebSocketDataListener {
             Log.e("CZD Websocket", "Bad URI " + url);
             return;
         }
-        this.webSocketClient = new SecureWebSocket(uri, new Draft_17());
+        if(null != this.webSocketClient) {
+            this.webSocketClient.close();
+        }
+        if(null == this.webSocketClient) {
+            this.webSocketClient = new SecureWebSocket(uri, new Draft_17());
+            this.connectWebSocket();
+            closed = false;
+        }
     }
 
     public void connectWebSocket() {
         Log.i("Websocket", "Connect");
+        //FileService.writeLogFile("Connect");
 
-        if (uri == null) {
+        if (null == uri) {
             return;
         }
 
@@ -109,9 +125,10 @@ public class WebSocketDataListener {
         //headers.put("Sec-WebSocket-Protocol", "http-only");
         headers.put("Sec-WebSocket-Protocol", "http-only, chat");
         //headers.put("token",token);
+        //FileService.writeLogFile("ToString = " + uri.toString() + "\n");
 
         try {
-            if(uri.getPath().startsWith("wss")) {
+            if(uri.toString().startsWith("wss")) {
                 SSLContext sslContext = null;
                 try {
                     sslContext = SSLContext.getInstance("TLS");
@@ -123,11 +140,13 @@ public class WebSocketDataListener {
                 }
                 webSocketClient.setWebSocketFactory(new DefaultSSLWebSocketClientFactory(sslContext));
 
-                boolean retur = webSocketClient.connectBlocking();
-                //Log.d("CZD Websocket", "return " + retur);
-            }
-            else if (uri.getPath().startsWith("ws")){
                 webSocketClient.connectBlocking();
+                //Log.d("CZD Websocket", "return " + retur);
+                //FileService.writeLogFile("CONNECT + END SECURE \n");
+            }
+            else if (uri.toString().startsWith("ws")){
+                webSocketClient.connectBlocking();
+                //FileService.writeLogFile("CONNECT + END \n");
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -135,9 +154,11 @@ public class WebSocketDataListener {
     }
 
     public void closeWebSocket() {
-        if (webSocketClient != null) {
+        //FileService.writeLogFile("Close");
+        if (null != webSocketClient ) {
             webSocketClient.close();
         }
+        closed = true;
     }
 
     public void writeData(String data) {
