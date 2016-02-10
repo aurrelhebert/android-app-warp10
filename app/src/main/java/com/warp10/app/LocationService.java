@@ -29,7 +29,9 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Service used to always get available user loaction
@@ -227,7 +229,20 @@ public class LocationService extends Service {
                     if(CollectService.isPostActive) {
                         FileService.writeToFile(buffer.toString(), context);
                     } else {
-                        CollectService.ws.writeData(buffer.toString());
+                        if(CollectService.ws.isClosed()) {
+                            FileService.writeToFile(buffer.toString(), context);
+                        } else {
+                            List<File> allFiles = FileService.getAllFiles("fill", context, true);
+                            for (File file:allFiles) {
+                                String data = FileService.readMetricFile(file);
+                                if(CollectService.ws.writeData(data)) {
+                                    file.delete();
+                                }
+                            }
+                            if(!CollectService.ws.writeData(buffer.toString())) {
+                                FileService.writeToFile(buffer.toString(), context);
+                            }
+                        }
                     }
                     stringBuffer = new StringBuffer();
                 }

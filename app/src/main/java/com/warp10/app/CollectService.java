@@ -206,8 +206,11 @@ public class CollectService extends Service {
         //String urlWebService = "wss://warp1.cityzendata.net/api/v0/streamupdate";
         //String valToken = this.token;
         if (!isPostActive) {
-            //FileService.setContext(getApplicationContext());
+            FileService.setContext(getApplicationContext());
             ws = new WebSocketDataListener(this.url, this.token);
+            if (null != ws.getError()) {
+                FlushService.sendNotification(this,"Socket is closed", "An error occurred during the connection with the socket : " + ws.getError() + " Try to restart the collect.");
+            }
             //ws.connectWebSocket();
         }
         /*webSocket = new WebSocketJetty(urlWebService,this.token);
@@ -239,7 +242,7 @@ public class CollectService extends Service {
             stopService(intent);
         }
         if(!isPostActive) {
-            //FileService.setContext(getApplicationContext());
+            FileService.setContext(getApplicationContext());
             CollectService.ws.closeWebSocket();
         }
         //webSocket.closeSockets();

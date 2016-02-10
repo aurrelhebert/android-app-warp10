@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">Warp App</string>
+    <string name="app_name">Warp 10 App</string>
     <string name="action_settings">Settings</string>
     <string name="prefixGTS">Enter a prefix for yours GTS</string>
-    <string name="warpUrlTitle">Warp Url</string>
+    <string name="warpUrlTitle">Warp 10 Url</string>
     <string name="warpUrlMessage">Enter the url of your application API ENDPOINT</string>
     <string name="warpUrlValue">"https://warp.cityzendata.net/api/v0/update"</string>
     <string name="tokenTitle">Token</string>
@@ -21,7 +21,7 @@
     <string name="keepValuesMessage">Choose a mode to keep value, keep recent value will delete the old one but also kept a buffer, when old will no longer record when the limit is reached</string>
     <string name="limitSizeTitle"> Size limit on disk of this application</string>
     <string name="limitSizeMessage"> Choose the maximal size to allow write on disk of the application. 100 Mo is the minimal value.</string>
-    <string name="urlWSTitle">Warp Url for WebSocket</string>
+    <string name="urlWSTitle">Warp 10 Url for WebSocket</string>
     <string name="urlWSMessage">Enter the url for WebSocket of your application</string>
     <string name="urlWSValue">"wss://warp1.cityzendata.net/api/v0/streamupdate"</string>
 
