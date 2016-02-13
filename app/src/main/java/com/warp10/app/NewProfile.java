@@ -87,6 +87,14 @@ public class NewProfile extends AppCompatActivity {
                         MODE_PRIVATE);
                 //Log.d("" + countValue, myValue);
                 sp.edit().putString("" + countValue, myValue).commit();
+
+                SharedPreferences sharedPreferences = PreferenceManager.
+                        getDefaultSharedPreferences(getApplicationContext());
+                sharedPreferences.edit().putString("url",url.getText().toString()).commit();
+                sharedPreferences.edit().putString("token",token.getText().toString()).commit();
+                sharedPreferences.edit().putString("prefix",prefix.getText().toString().
+                        replaceAll(";", "_")).commit();
+                sharedPreferences.edit().putString("checkedGTS","[]").commit();
                 //profile.getPreferenceManager().setSharedPreferencesName("profile");
                 //profile.saveValue(myValue, name.getText().toString().replaceAll(";", "_"));
                 //getPreferenceManager().setSharedPreferencesName("profile");

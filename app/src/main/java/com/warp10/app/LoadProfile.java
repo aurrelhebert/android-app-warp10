@@ -2,6 +2,7 @@ package com.warp10.app;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -223,7 +224,17 @@ public class LoadProfile extends DialogPreference {
                         token.getText().toString() + ";" + prefix.getText().toString().replaceAll(";","_") + ";" +
                         profile.getAllCheckedGts();
                 saveValue(myValue, name.getText().toString().replaceAll(";", "_"));
+
+                SharedPreferences sharedPreferences = PreferenceManager.
+                        getDefaultSharedPreferences(getContext());
+                sharedPreferences.edit().putString("url",url.getText().toString()).commit();
+                sharedPreferences.edit().putString("token",token.getText().toString()).commit();
+                sharedPreferences.edit().putString("prefix",prefix.getText().toString().
+                        replaceAll(";", "_")).commit();
+                sharedPreferences.edit().putString("checkedGTS",profile.getAllCheckedGts()).commit();
                 getDialog().dismiss();
+                Intent intent = new Intent(getContext(), WarpActivity.class);
+                getContext().startActivity(intent);
             }
         });
 
