@@ -95,4 +95,13 @@
         android:id="@+id/isCollectActive"
         android:clickable="false"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Load a Profil"
+        android:onClick="loadAProfil"
+        android:id="@+id/button3"
+        android:layout_below="@+id/ScrollView01"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

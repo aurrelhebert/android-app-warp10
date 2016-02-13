@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/currentProfileDescriptionName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your profile name"/>
+
+    <EditText
+        android:id="@+id/currentProfileName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/currentProfileDescriptionUrl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Indicate the url of the Warp 10 platform"/>
+
+    <EditText
+        android:id="@+id/currentProfileUrl"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/currentProfileDescriptionToken"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Write token of the Warp 10 platform"/>
+
+    <EditText
+        android:id="@+id/currentProfileToken"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/currentProfileDescriptionPrefix"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Prefix of the GTS where your data will be pushed"/>
+
+    <EditText
+        android:id="@+id/currentProfilePrefix"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/profileOk"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="OK"/>
+        <Button
+            android:id="@+id/profileCancel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancel"/>
+        <Button
+            android:id="@+id/profileDelete"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Delete"/>
+    </LinearLayout>
+
+</LinearLayout>
