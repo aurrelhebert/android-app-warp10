@@ -86,15 +86,17 @@ public class NewProfile extends AppCompatActivity {
                 SharedPreferences sp = getSharedPreferences(ProfileFragment.NAME_SHARED_FILE_PROFILE,
                         MODE_PRIVATE);
                 //Log.d("" + countValue, myValue);
-                sp.edit().putString("" + countValue, myValue).commit();
+                sp.edit().putString("" + countValue, myValue).apply();
 
                 SharedPreferences sharedPreferences = PreferenceManager.
                         getDefaultSharedPreferences(getApplicationContext());
-                sharedPreferences.edit().putString("url",url.getText().toString()).commit();
-                sharedPreferences.edit().putString("token",token.getText().toString()).commit();
+                sharedPreferences.edit().putString("url",url.getText().toString()).apply();
+                sharedPreferences.edit().putString("token",token.getText().toString()).apply();
                 sharedPreferences.edit().putString("prefix",prefix.getText().toString().
-                        replaceAll(";", "_")).commit();
-                sharedPreferences.edit().putString("checkedGTS","[]").commit();
+                        replaceAll(";", "_")).apply();
+                sharedPreferences.edit().putString("checkedGTS","[]").apply();
+
+                sp.edit().putString("currentKey","" + countValue).apply();
                 //profile.getPreferenceManager().setSharedPreferencesName("profile");
                 //profile.saveValue(myValue, name.getText().toString().replaceAll(";", "_"));
                 //getPreferenceManager().setSharedPreferencesName("profile");

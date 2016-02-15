@@ -86,10 +86,10 @@ public class FirstActivity extends AppCompatActivity {
 
     public void loadProfile(View view) {
         SharedPreferences sp = this.getSharedPreferences(ProfileFragment.NAME_SHARED_FILE_PROFILE, Activity.MODE_PRIVATE);
-//        if(sp.getAll().isEmpty()) {
-//            createDialogSingleMessage("Please create a profile before going to the load page");
-//            return;
-//        }
+        if(sp.getAll().isEmpty()) {
+            createDialogSingleMessage("Please create a profile before going to the load page");
+            return;
+        }
         Intent intent = new Intent(this,SetLoadProfile.class);
         startActivity(intent);
     }
@@ -122,7 +122,7 @@ public class FirstActivity extends AppCompatActivity {
     public void newProfile(View view) {
         Intent intent = new Intent(this, NewProfile.class);
         startActivity(intent);
-        SharedPreferences sp = this.getSharedPreferences("profile", MODE_PRIVATE);
-        Log.d("Profile ?", sp.getAll().toString());
+        //SharedPreferences sp = this.getSharedPreferences("profile", MODE_PRIVATE);
+        //Log.d("Profile ?", sp.getAll().toString());
     }
 }

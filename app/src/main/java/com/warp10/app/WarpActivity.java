@@ -251,6 +251,9 @@ public class WarpActivity extends AppCompatActivity implements SharedPreferences
         ed.putString("prefix", prefixGTS);
         ed.commit();
 
+        //Save the current Profile
+        saveProfile();
+
         if(warpUrl.equals("NULL") || token.equals("NULL")) {
             createDialogSingleMessage("Consider changing url and token in this app setting");
         }
@@ -544,8 +547,51 @@ public class WarpActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
-    public void loadAProfil(View view) {
-        Intent intent = new Intent(this,FirstActivity.class);
+    public void saveCurrentProfile(View view) {
+        saveProfile();
+        //Intent intent = new Intent(this,FirstActivity.class);
+        //startActivity(intent);
+    }
+
+    private void saveProfile() {
+        SharedPreferences sp = this.getSharedPreferences(ProfileFragment.NAME_SHARED_FILE_PROFILE, MODE_PRIVATE);
+        String key = sp.getString("currentKey", "NULL");
+        Log.d("Key", key);
+        if(!key.equals("NULL")) {
+            String name = LoadProfile.getName(sp.getString(key, "NULL"));
+            SharedPreferences sharedPrefs = PreferenceManager
+                    .getDefaultSharedPreferences(getApplicationContext());
+            String url = sharedPrefs.getString("url", "NULL");
+            String token = sharedPrefs.getString("token", "NULL");
+            TextView settingsPrefix = (TextView) findViewById(com.warp10.app.R.id.prefixGTS);
+            String prefix = settingsPrefix.getText().toString();
+            ArrayList<CharSequence> sensorList = getAllCheckedSensors();
+            String allCheckedGTS = sensorList.toString();
+
+            String myValue = name.replaceAll(";","_") + ";" +
+                    url + ";" + token + ";"
+                    + prefix.replaceAll(";", "_") + ";" +
+                    allCheckedGTS.replaceAll(";", "_");
+            Log.d("Value", myValue);
+            sp.edit().putString(key,myValue).apply();
+        }
+    }
+
+    /**
+     * Method answer click on create New Profile - Launch new Profile Activity
+     * @param item
+     */
+    public void addAProfile(MenuItem item) {
+        Intent intent = new Intent(this, NewProfile.class);
+        startActivity(intent);
+    }
+
+    /**
+     * Method to answer click on Load an existing Profile - Launch the Profile Menu
+     * @param item
+     */
+    public void loadAProfile(MenuItem item) {
+        Intent intent = new Intent(this,SetLoadProfile.class);
         startActivity(intent);
     }
 }

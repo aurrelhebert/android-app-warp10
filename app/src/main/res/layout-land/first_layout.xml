@@ -31,17 +31,18 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/imageView2" />
+            android:id="@+id/imageView2"
+            android:layout_toStartOf="@+id/button" />
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/imageButton"
-            android:layout_alignParentEnd="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_above="@+id/button"
-            android:background="#00ffffff" />
+            android:background="#00ffffff"
+            android:layout_toStartOf="@+id/button2" />
 
         <Button
             android:layout_width="wrap_content"
@@ -49,8 +50,8 @@
             android:text="Load a profile"
             android:onClick="loadProfile"
             android:id="@+id/button"
-            android:layout_alignTop="@+id/button2"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/imageButton" />
 
         <Button
             android:layout_width="wrap_content"
@@ -59,7 +60,7 @@
             android:onClick="newProfile"
             android:id="@+id/button2"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 

@@ -2,6 +2,7 @@ package com.warp10.app;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 
@@ -46,10 +47,12 @@ public class ProfileFragment extends PreferenceFragment {
                 /**
                  * Add it on the preference screen by creating a new sensorPreference
                  */
-                myPref = new LoadProfile(preferenceScreen.getContext(), null,
-                        sharedPreferences.getString(pref,"NULL"), pref);
-                //Log.d("PREF + VALUE", myPref.toString() + " " + sharedPreferences.getString(pref, "NULL"));
-                preferenceScreen.addPreference(myPref);
+                if(!sharedPreferences.getString(pref ,"NULL").equals("currentKey")) {
+                    myPref = new LoadProfile(preferenceScreen.getContext(), null,
+                            sharedPreferences.getString(pref ,"NULL"), pref);
+                    //Log.d("PREF + VALUE", myPref.toString() + " " + sharedPreferences.getString(pref, "NULL"));
+                    preferenceScreen.addPreference(myPref);
+                }
             } else {
                 /**
                  * Otherwise update it with user modification
@@ -60,6 +63,7 @@ public class ProfileFragment extends PreferenceFragment {
                 }
             }
         }
-
+        Preference myPreference = preferenceScreen.findPreference("currentKey");
+        preferenceScreen.removePreference(myPreference);
     }
 }

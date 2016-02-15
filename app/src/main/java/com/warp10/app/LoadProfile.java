@@ -227,11 +227,11 @@ public class LoadProfile extends DialogPreference {
 
                 SharedPreferences sharedPreferences = PreferenceManager.
                         getDefaultSharedPreferences(getContext());
-                sharedPreferences.edit().putString("url",url.getText().toString()).commit();
-                sharedPreferences.edit().putString("token",token.getText().toString()).commit();
+                sharedPreferences.edit().putString("url",url.getText().toString()).apply();
+                sharedPreferences.edit().putString("token",token.getText().toString()).apply();
                 sharedPreferences.edit().putString("prefix",prefix.getText().toString().
-                        replaceAll(";", "_")).commit();
-                sharedPreferences.edit().putString("checkedGTS",profile.getAllCheckedGts()).commit();
+                        replaceAll(";", "_")).apply();
+                sharedPreferences.edit().putString("checkedGTS",profile.getAllCheckedGts()).apply();
                 getDialog().dismiss();
                 Intent intent = new Intent(getContext(), WarpActivity.class);
                 getContext().startActivity(intent);
@@ -261,7 +261,7 @@ public class LoadProfile extends DialogPreference {
                 Preference preference = getPreferenceManager().findPreference(getKey());
                 PreferenceScreen preferenceScreen = (PreferenceScreen) getPreferenceManager().findPreference("profilePrefScreen");
                 preferenceScreen.removePreference(preference);
-                getSharedPreferences().edit().remove(getKey()).commit();
+                getSharedPreferences().edit().remove(getKey()).apply();
                 getDialog().dismiss();
             }
         });
@@ -295,8 +295,9 @@ public class LoadProfile extends DialogPreference {
         if(attr == null) {
             getPreferenceManager().setSharedPreferencesName(ProfileFragment.NAME_SHARED_FILE_PROFILE);
             SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
-            sharedPreferences.edit().putString(getKey(), value).commit();
+            //sharedPreferences.edit().putString(getKey(), value).commit();
             sharedPreferences.edit().putString(getKey(), value).apply();
+            getEditor().putString("currentKey",getKey()).apply();
             setTitle(title);
             //editor.apply();
             return;
@@ -307,8 +308,9 @@ public class LoadProfile extends DialogPreference {
         SensorPreference pref = (SensorPreference) getPreferenceManager().findPreference(getKey());
         pref.setTitle(title);
         //getPreferenceManager().setSharedPreferencesName(getKey());
-        getEditor().putString(getKey(), value).commit();
+        //getEditor().putString(getKey(), value).commit();
         getEditor().putString(getKey(), value).apply();
+        getEditor().putString("currentKey",getKey()).apply();
         //this.setTitle(title);
         myValue = value;
         Log.d("SAVE", value);
@@ -406,7 +408,7 @@ public class LoadProfile extends DialogPreference {
         myValue = (restore ? getPersistedString(mDefault) : (String) defaultValue);
         getPreferenceManager().setSharedPreferencesName(ProfileFragment.NAME_SHARED_FILE_PROFILE);
         if(!getSharedPreferences().contains(getKey())){
-            getSharedPreferences().edit().putString(getKey(),myValue).commit();
+            getSharedPreferences().edit().putString(getKey(),myValue).apply();
         }
     }
 }
