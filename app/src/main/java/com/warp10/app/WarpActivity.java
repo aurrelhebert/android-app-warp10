@@ -249,7 +249,7 @@ public class WarpActivity extends AppCompatActivity implements SharedPreferences
         String names = sensorList.toString();
         ed.putString("checkedGTS",names);
         ed.putString("prefix", prefixGTS);
-        ed.commit();
+        ed.apply();
 
         //Save the current Profile
         saveProfile();

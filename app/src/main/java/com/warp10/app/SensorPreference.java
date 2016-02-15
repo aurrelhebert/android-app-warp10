@@ -206,7 +206,7 @@ public class SensorPreference extends DialogPreference {
                 Preference preference = getPreferenceManager().findPreference(getKey());
                 PreferenceScreen preferenceScreen = (PreferenceScreen) getPreferenceManager().findPreference("sensorPrefScreen");
                 preferenceScreen.removePreference(preference);
-                getSharedPreferences().edit().remove(getKey()).commit();
+                getSharedPreferences().edit().remove(getKey()).apply();
                 getDialog().dismiss();
             }
         });
@@ -252,7 +252,7 @@ public class SensorPreference extends DialogPreference {
         if(attr == null) {
             SharedPreferences sharedPreferences = PreferenceManager
                     .getDefaultSharedPreferences(getContext());
-            sharedPreferences.edit().putString(getKey(), value).commit();
+            //sharedPreferences.edit().putString(getKey(), value).commit();
             sharedPreferences.edit().putString(getKey(), value).apply();
             setTitle(title);
             //editor.apply();
@@ -261,7 +261,7 @@ public class SensorPreference extends DialogPreference {
         SensorPreference pref = (SensorPreference) getPreferenceManager().findPreference(getKey());
         pref.setTitle(title);
         //getPreferenceManager().setSharedPreferencesName(getKey());
-        getEditor().putString(getKey(), value).commit();
+        //getEditor().putString(getKey(), value).commit();
         getEditor().putString(getKey(), value).apply();
         try {
             pref.finalize();
@@ -361,7 +361,7 @@ public class SensorPreference extends DialogPreference {
     {
         myValue = (restore ? getPersistedString(mDefault) : (String) defaultValue);
         if(!getSharedPreferences().contains(getKey())){
-            getSharedPreferences().edit().putString(getKey(),myValue).commit();
+            getSharedPreferences().edit().putString(getKey(),myValue).apply();
         }
     }
 }

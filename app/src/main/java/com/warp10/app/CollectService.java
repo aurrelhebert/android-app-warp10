@@ -177,7 +177,7 @@ public class CollectService extends Service {
         SharedPreferences.Editor ed = sharedPreferences.edit();
         ed.putBoolean("isActive", true);
         //ed.putString("prefix", prefixGts);
-        ed.commit();
+        ed.apply();
     }
 
     /**
@@ -279,7 +279,7 @@ public class CollectService extends Service {
             } else {
                 SharedPreferences.Editor ed = sharedPreferences.edit();
                 ed.putBoolean("isActive", false);
-                ed.commit();
+                ed.apply();
             }
 
             // Shut down all the services
