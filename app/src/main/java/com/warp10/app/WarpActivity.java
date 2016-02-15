@@ -23,6 +23,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
@@ -30,11 +34,13 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -107,6 +113,49 @@ public class WarpActivity extends AppCompatActivity implements SharedPreferences
         }
         */
         showUserSettings();
+
+        SharedPreferences sp = this.getSharedPreferences(ProfileFragment.NAME_SHARED_FILE_PROFILE,
+                MODE_PRIVATE);
+        Log.d("Profile ?", sp.getAll().toString());
+    }
+
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
+    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+                                                         int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(res, resId, options);
     }
 
     /**
@@ -200,7 +249,10 @@ public class WarpActivity extends AppCompatActivity implements SharedPreferences
         String names = sensorList.toString();
         ed.putString("checkedGTS",names);
         ed.putString("prefix", prefixGTS);
-        ed.commit();
+        ed.apply();
+
+        //Save the current Profile
+        saveProfile();
 
         if(warpUrl.equals("NULL") || token.equals("NULL")) {
             createDialogSingleMessage("Consider changing url and token in this app setting");
@@ -493,5 +545,53 @@ public class WarpActivity extends AppCompatActivity implements SharedPreferences
                 checkBox.setChecked(false);
             }
         }
+    }
+
+    public void saveCurrentProfile(View view) {
+        saveProfile();
+        //Intent intent = new Intent(this,FirstActivity.class);
+        //startActivity(intent);
+    }
+
+    private void saveProfile() {
+        SharedPreferences sp = this.getSharedPreferences(ProfileFragment.NAME_SHARED_FILE_PROFILE, MODE_PRIVATE);
+        String key = sp.getString("currentKey", "NULL");
+        Log.d("Key", key);
+        if(!key.equals("NULL")) {
+            String name = LoadProfile.getName(sp.getString(key, "NULL"));
+            SharedPreferences sharedPrefs = PreferenceManager
+                    .getDefaultSharedPreferences(getApplicationContext());
+            String url = sharedPrefs.getString("url", "NULL");
+            String token = sharedPrefs.getString("token", "NULL");
+            TextView settingsPrefix = (TextView) findViewById(com.warp10.app.R.id.prefixGTS);
+            String prefix = settingsPrefix.getText().toString();
+            ArrayList<CharSequence> sensorList = getAllCheckedSensors();
+            String allCheckedGTS = sensorList.toString();
+
+            String myValue = name.replaceAll(";","_") + ";" +
+                    url + ";" + token + ";"
+                    + prefix.replaceAll(";", "_") + ";" +
+                    allCheckedGTS.replaceAll(";", "_");
+            Log.d("Value", myValue);
+            sp.edit().putString(key,myValue).apply();
+        }
+    }
+
+    /**
+     * Method answer click on create New Profile - Launch new Profile Activity
+     * @param item
+     */
+    public void addAProfile(MenuItem item) {
+        Intent intent = new Intent(this, NewProfile.class);
+        startActivity(intent);
+    }
+
+    /**
+     * Method to answer click on Load an existing Profile - Launch the Profile Menu
+     * @param item
+     */
+    public void loadAProfile(MenuItem item) {
+        Intent intent = new Intent(this,SetLoadProfile.class);
+        startActivity(intent);
     }
 }

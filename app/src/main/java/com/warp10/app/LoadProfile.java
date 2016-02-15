@@ -1,31 +1,18 @@
-//
-//   Copyright 2016  Cityzen Data
-//
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-//   Unless required by applicable law or agreed to in writing, software
-//   distributed under the License is distributed on an "AS IS" BASIS,
-//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//   See the License for the specific language governing permissions and
-//   limitations under the License.
-//
-
 package com.warp10.app;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.DialogPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Pair;
@@ -34,49 +21,79 @@ import android.widget.Button;
 import android.widget.EditText;
 
 /**
- * Created by ahebert on 1/8/16.
- * PreferenceType SensorPreference correspond to a sensor Description
+ * Created by ahebert on 2/12/16.
  */
-public class SensorPreference extends DialogPreference {
+public class LoadProfile extends DialogPreference {
 
     /**
-     * Private sensorDescription is a title and a value
+     * Private profileDescription with a name, url, token, prefix and all checked GTS
      */
-    private class SensorDescription {
-        String title;
-        String value;
+    private class Profile {
+        String name;
+        String url;
+        String token;
+        String prefix;
+        String allCheckedGts;
 
-        public SensorDescription(String title, String value) {
-            this.title = title;
-            this.value = value;
+        public Profile(String[] tab) {
+            Log.d("tab", tab.toString());
+            this.name = tab[0];
+            this.url = tab[1];
+            this.token = tab[2];
+            this.prefix = tab[3];
+            this.allCheckedGts = tab[4];
         }
 
-        public String getTitle() {
-            return title;
+        public String getAllCheckedGts() {
+            return allCheckedGts;
         }
 
-        public void setTitle(String title) {
-            this.title = title;
+        public void setAllCheckedGts(String allCheckedGts) {
+            this.allCheckedGts = allCheckedGts;
         }
 
-        public String getValue() {
-            return value;
+        public String getName() {
+            return name;
         }
 
-        public void setValue(String value) {
-            this.value = value;
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getPrefix() {
+            return prefix;
+        }
+
+        public void setPrefix(String prefix) {
+            this.prefix = prefix;
+        }
+
+        public String getToken() {
+            return token;
+        }
+
+        public void setToken(String token) {
+            this.token = token;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
         }
     }
 
     /**
-     * Value stored in shared preference : title [value]
+     * Value stored in shared preference : name [value]
      */
     String myValue = "";
 
     /**
      * Sensor description associated to the current sensor preference
      */
-    SensorDescription sensorDescription;
+    Profile profile;
 
     /**
      * Value by default
@@ -89,50 +106,60 @@ public class SensorPreference extends DialogPreference {
     AttributeSet attr;
 
     /**
-     * Constructor - load the layout sensor
+     * Constructor - load the layout current profile
      * @param context
      * @param attrs
      */
-    public SensorPreference(Context context, AttributeSet attrs) {
+    public LoadProfile(Context context, AttributeSet attrs)
+
+    {
         super(context, attrs);
         attr = attrs;
-        setDialogLayoutResource(com.warp10.app.R.layout.sensor_layout);
+        setDialogLayoutResource(R.layout.current_profile);
         setDialogIcon(null);
     }
 
     /**
-     * Constructor - load the layout sensor ans set key of current preference
+     * Constructor - load the layout current profile and set key of current preference
      * @param context
      * @param attrs
      */
-    public SensorPreference(Context context, AttributeSet attrs, String key) {
+    public LoadProfile(Context context, AttributeSet attrs, String key) {
         super(context, attrs);
         attr = attrs;
-        setDialogLayoutResource(com.warp10.app.R.layout.sensor_layout);
+        setDialogLayoutResource(R.layout.current_profile);
         setDialogIcon(null);
         this.setKey(key);
         //setPersistent(true);
     }
 
     /**
-     * Constructor - load the layout sensor, set key and value
+     * Constructor - load the layout current profile, set key and value
      * @param context
      * @param attrs
      */
-    public SensorPreference(Context context, AttributeSet attrs, String value, String key) {
+    public LoadProfile(Context context, AttributeSet attrs, String value, String key) {
         super(context, attrs);
-        this.setTitle(parseValue(value).first);
+        this.setTitle(getName(value));
         this.myValue = value;
         attr = attrs;
-        setDialogLayoutResource(com.warp10.app.R.layout.sensor_layout);
+        setDialogLayoutResource(R.layout.current_profile);
         setDialogIcon(null);
         this.setKey(key);
     }
 
     /**
+     * function used to extract name of string
+     */
+    protected static String getName(String value){
+        return value.split(";")[0];
+    }
+
+
+    /**
      * Function used to prepare the dialog
      * Delete positive and negative buttons of the view
-     * Set the title of the dialog with current preferene title
+     * Set the title of the dialog with current preference title
      * @param builder view builder
      */
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
@@ -143,7 +170,7 @@ public class SensorPreference extends DialogPreference {
     }
 
     /**
-     * When clicked open a dialog containing the layout sensor
+     * When clicked open a dialog containing the layout current profile
      * Set current title and value with preferences title and value
      * Add 3 buttons save, cancel and delete
      * On save, update and register current sensor preference
@@ -155,39 +182,66 @@ public class SensorPreference extends DialogPreference {
         super.onBindDialogView(view);
         final View myView = view;
 
-        sensorDescription = getValue();
+        profile = getValue();
 
         /**
          * Set title with title preference
          */
-        EditText ed = (EditText) view.findViewById(com.warp10.app.R.id.currentSensorTitle);
-        ed.setText(sensorDescription.getTitle());
+        EditText edName = (EditText) view.findViewById(R.id.currentProfileName);
+        edName.setText(profile.getName());
 
         /**
          * Set value with value preference
          */
-        EditText ed2 = (EditText) view.findViewById(com.warp10.app.R.id.currentSensorValue);
-        ed2.setText(sensorDescription.getValue());
+        EditText edUrl = (EditText) view.findViewById(R.id.currentProfileUrl);
+        edUrl.setText(profile.getUrl());
+
+        /**
+         * Set title with title preference
+         */
+        EditText edTok = (EditText) view.findViewById(R.id.currentProfileToken);
+        edTok.setText(profile.getToken());
+
+        /**
+         * Set value with value preference
+         */
+        EditText edPref = (EditText) view.findViewById(R.id.currentProfilePrefix);
+        edPref.setText(profile.getPrefix());
 
         /**
          * Update current title and value of sensor preference
          */
-        Button okButton = (Button) view.findViewById(com.warp10.app.R.id.currentSensorOk);
+        Button okButton = (Button) view.findViewById(R.id.profileOk);
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText title = (EditText) myView.findViewById(com.warp10.app.R.id.currentSensorTitle);
-                EditText value = (EditText) myView.findViewById(com.warp10.app.R.id.currentSensorValue);
-                myValue = title.getText().toString() + " [" + value.getText().toString() + "]";
-                saveValue(myValue, title.getText().toString());
+                EditText name = (EditText) myView.findViewById(R.id.currentProfileName);
+
+                EditText url = (EditText) myView.findViewById(R.id.currentProfileUrl);
+                EditText token = (EditText) myView.findViewById(R.id.currentProfileToken);
+                EditText prefix = (EditText) myView.findViewById(R.id.currentProfilePrefix);
+                myValue = name.getText().toString().replaceAll(";","_") + ";" + url.getText().toString() + ";" +
+                        token.getText().toString() + ";" + prefix.getText().toString().replaceAll(";","_") + ";" +
+                        profile.getAllCheckedGts();
+                saveValue(myValue, name.getText().toString().replaceAll(";", "_"));
+
+                SharedPreferences sharedPreferences = PreferenceManager.
+                        getDefaultSharedPreferences(getContext());
+                sharedPreferences.edit().putString("url",url.getText().toString()).apply();
+                sharedPreferences.edit().putString("token",token.getText().toString()).apply();
+                sharedPreferences.edit().putString("prefix",prefix.getText().toString().
+                        replaceAll(";", "_")).apply();
+                sharedPreferences.edit().putString("checkedGTS",profile.getAllCheckedGts()).apply();
                 getDialog().dismiss();
+                Intent intent = new Intent(getContext(), WarpActivity.class);
+                getContext().startActivity(intent);
             }
         });
 
         /**
          * Do nothing
          */
-        Button cancelButton = (Button) view.findViewById(com.warp10.app.R.id.currentSensorCancel);
+        Button cancelButton = (Button) view.findViewById(R.id.profileCancel);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -198,13 +252,14 @@ public class SensorPreference extends DialogPreference {
         /**
          * Delete current preference from preference screen and shared preference
          */
-        Button deleteButton = (Button) view.findViewById(com.warp10.app.R.id.currentSensorDelete);
+        Button deleteButton = (Button) view.findViewById(R.id.profileDelete);
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO Add a dialog Are you sure ?
+                getPreferenceManager().setSharedPreferencesName(ProfileFragment.NAME_SHARED_FILE_PROFILE);
                 Preference preference = getPreferenceManager().findPreference(getKey());
-                PreferenceScreen preferenceScreen = (PreferenceScreen) getPreferenceManager().findPreference("sensorPrefScreen");
+                PreferenceScreen preferenceScreen = (PreferenceScreen) getPreferenceManager().findPreference("profilePrefScreen");
                 preferenceScreen.removePreference(preference);
                 getSharedPreferences().edit().remove(getKey()).apply();
                 getDialog().dismiss();
@@ -216,26 +271,14 @@ public class SensorPreference extends DialogPreference {
      * Get value of current preference in sharedPreference ("title [value]")
      * @return
      */
-    protected SensorDescription getValue() {
+    protected Profile getValue() {
         //PreferenceManager.setDefaultValues(getContext(), getKey(),  Context.MODE_PRIVATE, R.xml.sensors, false);
-        myValue = getSharedPreferences().getString(getKey(), mDefault);
-        Pair<String,String> pair = parseValue(myValue);
-        return new SensorDescription(pair.first, pair.second);
-    }
-
-    /**
-     * Parse the value of the preference
-     * @param val value of the preference ("title [value]")
-     * @return Pair<Title,Value>
-     */
-    public static Pair<String,String> parseValue(String val) {
-        //Log.d("Parse", val);
-        String[] tabString = val.split(" \\[");
-        if (tabString.length < 2) {
-            return new Pair(tabString[0], "");
-        }
-        String[] tabString2 = tabString[1].split("\\]");
-        return new Pair(tabString[0], tabString2[0]);
+        getPreferenceManager().setSharedPreferencesName(ProfileFragment.NAME_SHARED_FILE_PROFILE);
+        SharedPreferences sp = getPreferenceManager().getSharedPreferences();
+        myValue = sp.getString(getKey(), mDefault);
+        String[] tabValues = myValue.split(";");
+        Profile profile = new Profile(tabValues);
+        return profile;
     }
 
     protected Object onGetDefaultValue(TypedArray a, int index) {
@@ -249,25 +292,25 @@ public class SensorPreference extends DialogPreference {
      * @param title
      */
     protected void saveValue(String value, String title) {
-        if(null == attr) {
-            SharedPreferences sharedPreferences = PreferenceManager
-                    .getDefaultSharedPreferences(getContext());
+        if(attr == null) {
+            getPreferenceManager().setSharedPreferencesName(ProfileFragment.NAME_SHARED_FILE_PROFILE);
+            SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
             //sharedPreferences.edit().putString(getKey(), value).commit();
             sharedPreferences.edit().putString(getKey(), value).apply();
+            getEditor().putString("currentKey",getKey()).apply();
             setTitle(title);
             //editor.apply();
             return;
         }
+
+        getPreferenceManager().setSharedPreferencesName(ProfileFragment.NAME_SHARED_FILE_PROFILE);
+        //SharedPreferences sp = getPreferenceManager().getSharedPreferences();
         SensorPreference pref = (SensorPreference) getPreferenceManager().findPreference(getKey());
         pref.setTitle(title);
         //getPreferenceManager().setSharedPreferencesName(getKey());
         //getEditor().putString(getKey(), value).commit();
         getEditor().putString(getKey(), value).apply();
-        try {
-            pref.finalize();
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
+        getEditor().putString("currentKey",getKey()).apply();
         //this.setTitle(title);
         myValue = value;
         Log.d("SAVE", value);
@@ -276,7 +319,7 @@ public class SensorPreference extends DialogPreference {
     /**
      * Function used to saveState, when an unwanted events happened
      */
-    private static class SavedState extends BaseSavedState {
+    private static class SavedState extends Preference.BaseSavedState {
         // Member that holds the setting's value
         String value;
 
@@ -337,7 +380,7 @@ public class SensorPreference extends DialogPreference {
      */
     protected void onRestoreInstanceState(Parcelable state) {
         // Check whether we saved the state in onSaveInstanceState
-        if (null == state || !state.getClass().equals(SavedState.class)) {
+        if (state == null || !state.getClass().equals(SavedState.class)) {
             // Didn't save the state, so call superclass
             super.onRestoreInstanceState(state);
             return;
@@ -348,8 +391,11 @@ public class SensorPreference extends DialogPreference {
         super.onRestoreInstanceState(myState.getSuperState());
 
         // Set this Preference's widget to reflect the restored state
-        Pair<String, String> pair= parseValue(((SavedState) state).value);
-        sensorDescription = new SensorDescription(pair.first,pair.second);
+        if(null!=(((SavedState) state).value)) {
+            profile = new Profile((((SavedState) state).value).split(";"));
+        } else {
+            profile = null;
+        }
     }
 
     /**
@@ -360,6 +406,7 @@ public class SensorPreference extends DialogPreference {
     protected void onSetInitialValue(boolean restore, Object defaultValue)
     {
         myValue = (restore ? getPersistedString(mDefault) : (String) defaultValue);
+        getPreferenceManager().setSharedPreferencesName(ProfileFragment.NAME_SHARED_FILE_PROFILE);
         if(!getSharedPreferences().contains(getKey())){
             getSharedPreferences().edit().putString(getKey(),myValue).apply();
         }

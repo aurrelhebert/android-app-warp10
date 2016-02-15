@@ -57,7 +57,8 @@ public class AlarmReceiver extends BroadcastReceiver
                     .getDefaultSharedPreferences(context);
             SharedPreferences.Editor ed = sharedPrefs.edit();
             ed.putBoolean("isActive", false);
-            ed.commit();
+
+            ed.apply();
             if(!CollectService.isPostActive) {
                 //TODO clean
                 //FileService.setContext(context);
