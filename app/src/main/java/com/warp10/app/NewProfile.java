@@ -42,25 +42,31 @@ public class NewProfile extends AppCompatActivity {
          * Set null on name
          */
         EditText edName = (EditText) findViewById(R.id.currentProfileName);
-        edName.setText("NULL");
+        edName.setText("name");
 
         /**
          * Set null on Url
          */
         EditText edUrl = (EditText) findViewById(R.id.currentProfileUrl);
-        edUrl.setText("NULL");
+        edUrl.setText("Warp10Url");
+
+        /**
+         * Set null on UrlSocket
+         */
+        EditText edSocket = (EditText) findViewById(R.id.currentProfileUrlSocket);
+        edSocket.setText("none");
 
         /**
          * Set null on Token
          */
         EditText edTok = (EditText) findViewById(R.id.currentProfileToken);
-        edTok.setText("NULL");
+        edTok.setText("token");
 
         /**
          * Set null on value
          */
         EditText edPref = (EditText) findViewById(R.id.currentProfilePrefix);
-        edPref.setText("NULL");
+        edPref.setText("android");
 
         Button okButton = (Button) findViewById(R.id.profileOk);
 
@@ -76,9 +82,10 @@ public class NewProfile extends AppCompatActivity {
                 EditText url = (EditText) findViewById(R.id.currentProfileUrl);
                 EditText token = (EditText) findViewById(R.id.currentProfileToken);
                 EditText prefix = (EditText) findViewById(R.id.currentProfilePrefix);
+                EditText socketUrl = (EditText) findViewById(R.id.currentProfileUrlSocket);
                 String myValue = name.getText().toString().replaceAll(";","_") + ";" + url.getText().toString() + ";" +
                         token.getText().toString() + ";" + prefix.getText().toString().replaceAll(";","_") + ";" +
-                        "[]";
+                        "[]" + ";" + socketUrl.getText().toString();
 
                 LoadProfile profile = new LoadProfile(ctx, null,"" + countValue);
                 profile.setKey("" + countValue);
@@ -95,6 +102,7 @@ public class NewProfile extends AppCompatActivity {
                 sharedPreferences.edit().putString("prefix",prefix.getText().toString().
                         replaceAll(";", "_")).apply();
                 sharedPreferences.edit().putString("checkedGTS","[]").apply();
+                sharedPreferences.edit().putString("urlWS", socketUrl.getText().toString()).apply();
 
                 sp.edit().putString("currentKey","" + countValue).apply();
                 //profile.getPreferenceManager().setSharedPreferencesName("profile");

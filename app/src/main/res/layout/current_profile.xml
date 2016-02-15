@@ -1,51 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="1">
 
-    <TextView
-        android:id="@+id/currentProfileDescriptionName"
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Your profile name"/>
+        android:id="@+id/scrollView"
+        android:layout_weight="0.98">
 
-    <EditText
-        android:id="@+id/currentProfileName"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/currentProfileDescriptionUrl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Indicate the url of the Warp 10 platform"/>
+            <TextView
+                android:id="@+id/currentProfileDescriptionName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your profile name"/>
 
-    <EditText
-        android:id="@+id/currentProfileUrl"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
+            <EditText
+                android:id="@+id/currentProfileName"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
 
-    <TextView
-        android:id="@+id/currentProfileDescriptionToken"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Write token of the Warp 10 platform"/>
+            <TextView
+                android:id="@+id/currentProfileDescriptionUrl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Indicate the url of the Warp 10 platform - This parameter is mandatory.
+        (If push with socket is active, data are still collected with HTTP Post)"/>
 
-    <EditText
-        android:id="@+id/currentProfileToken"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
+            <EditText
+                android:id="@+id/currentProfileUrl"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
 
-    <TextView
-        android:id="@+id/currentProfileDescriptionPrefix"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Prefix of the GTS where your data will be pushed"/>
+            <TextView
+                android:id="@+id/currentProfileDescriptionUrlSocket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Indicate the Socket url of the Warp 10 platform - This parameter can be none.
+        (When closing the application, the socket will be closed, and the collect will continue with HTTP Post)"/>
 
-    <EditText
-        android:id="@+id/currentProfilePrefix"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
+            <EditText
+                android:id="@+id/currentProfileUrlSocket"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/currentProfileDescriptionToken"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Write token of the Warp 10 platform"/>
+
+            <EditText
+                android:id="@+id/currentProfileToken"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/currentProfileDescriptionPrefix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Prefix of the GTS where your data will be pushed"/>
+
+            <EditText
+                android:id="@+id/currentProfilePrefix"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -70,6 +97,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Delete"/>
+
     </LinearLayout>
 
 </LinearLayout>

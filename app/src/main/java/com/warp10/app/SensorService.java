@@ -431,22 +431,10 @@ public class SensorService extends IntentService implements SensorEventListener 
         if (stringBuffer != null) {
             //Log.d("SensorService", stringBuffer.toString());
             final StringBuffer buffer = new StringBuffer(stringBuffer);
-            if (CollectService.isPostActive) {
-                FileService.writeToFile(buffer.toString(), this);
-            } else {
-                if(CollectService.ws.isClosed()) {
-                    FileService.writeToFile(buffer.toString(), this);
-                } else {
-                    List<File> allFiles = FileService.getAllFiles("fill", this, true);
-                    for (File file:allFiles) {
-                        String data = FileService.readMetricFile(file);
-                        if(CollectService.ws.writeData(data)) {
-                            file.delete();
-                        }
-                    }
-                    if(!CollectService.ws.writeData(buffer.toString())) {
-                        FileService.writeToFile(buffer.toString(), this);
-                    }
+            FileService.writeToFile(buffer.toString(), this);
+            if (!CollectService.isPostActive) {
+                if(!CollectService.ws.isClosed()) {
+                        CollectService.ws.writeData(buffer.toString());
                 }
             }
             //FlushWithSocket.writeValues(buffer.toString());

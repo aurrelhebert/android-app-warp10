@@ -55,6 +55,12 @@ public class CollectService extends Service {
     protected String url;
 
     /**
+     * Url to push data
+     */
+    protected String socketUrl;
+
+
+    /**
      * Authenticate write token
      */
     protected String token;
@@ -151,11 +157,8 @@ public class CollectService extends Service {
         sensorNameList.addAll(sensorName);
         this.flushTime = Integer.valueOf(sharedPreferences.getString("flush", "60"));
         this.isPostActive = sharedPreferences.getBoolean("postWS", true);
-        if(isPostActive) {
-            this.url = sharedPreferences.getString("url", "NULL");
-        } else {
-            this.url = sharedPreferences.getString("urlWS", "NULL");
-        }
+        this.url = sharedPreferences.getString("url", "NULL");
+        this.socketUrl = sharedPreferences.getString("urlWS", "NULL");
         boolean useNet = sharedPreferences.getBoolean("useInternet", true);
         limit = Integer.valueOf(sharedPreferences.getString("limitSizeDisk", "100"));
         boolean mode = sharedPreferences.getBoolean("keepValues",false);
@@ -207,7 +210,7 @@ public class CollectService extends Service {
         //String valToken = this.token;
         if (!isPostActive) {
             FileService.setContext(getApplicationContext());
-            ws = new WebSocketDataListener(this.url, this.token);
+            ws = new WebSocketDataListener(this.socketUrl, this.token);
             if (null != ws.getError()) {
                 FlushService.sendNotification(this,"Socket is closed", "An error occurred during the connection with the socket : " + ws.getError() + " Try to restart the collect.");
             }
