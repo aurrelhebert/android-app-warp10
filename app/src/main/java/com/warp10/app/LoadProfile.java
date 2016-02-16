@@ -34,14 +34,23 @@ public class LoadProfile extends DialogPreference {
         String token;
         String prefix;
         String allCheckedGts;
+        String urlSocket;
 
         public Profile(String[] tab) {
-            Log.d("tab", tab.toString());
             this.name = tab[0];
             this.url = tab[1];
             this.token = tab[2];
             this.prefix = tab[3];
             this.allCheckedGts = tab[4];
+            this.urlSocket = tab[5];
+        }
+
+        public String getUrlSocket() {
+            return urlSocket;
+        }
+
+        public void setUrlSocket(String urlSocket) {
+            this.urlSocket = urlSocket;
         }
 
         public String getAllCheckedGts() {
@@ -197,6 +206,12 @@ public class LoadProfile extends DialogPreference {
         edUrl.setText(profile.getUrl());
 
         /**
+         * Set value with value preference
+         */
+        EditText socketUrl = (EditText) view.findViewById(R.id.currentProfileUrlSocket);
+        socketUrl.setText(profile.getUrlSocket());
+
+        /**
          * Set title with title preference
          */
         EditText edTok = (EditText) view.findViewById(R.id.currentProfileToken);
@@ -216,13 +231,13 @@ public class LoadProfile extends DialogPreference {
             @Override
             public void onClick(View v) {
                 EditText name = (EditText) myView.findViewById(R.id.currentProfileName);
-
                 EditText url = (EditText) myView.findViewById(R.id.currentProfileUrl);
                 EditText token = (EditText) myView.findViewById(R.id.currentProfileToken);
                 EditText prefix = (EditText) myView.findViewById(R.id.currentProfilePrefix);
+                EditText socketUrl = (EditText) myView.findViewById(R.id.currentProfileUrlSocket);
                 myValue = name.getText().toString().replaceAll(";","_") + ";" + url.getText().toString() + ";" +
                         token.getText().toString() + ";" + prefix.getText().toString().replaceAll(";","_") + ";" +
-                        profile.getAllCheckedGts();
+                        profile.getAllCheckedGts() + ";" + socketUrl.getText().toString();
                 saveValue(myValue, name.getText().toString().replaceAll(";", "_"));
 
                 SharedPreferences sharedPreferences = PreferenceManager.
@@ -231,6 +246,7 @@ public class LoadProfile extends DialogPreference {
                 sharedPreferences.edit().putString("token",token.getText().toString()).apply();
                 sharedPreferences.edit().putString("prefix",prefix.getText().toString().
                         replaceAll(";", "_")).apply();
+                sharedPreferences.edit().putString("urlWS", socketUrl.getText().toString()).apply();
                 sharedPreferences.edit().putString("checkedGTS",profile.getAllCheckedGts()).apply();
                 getDialog().dismiss();
                 Intent intent = new Intent(getContext(), WarpActivity.class);
@@ -276,6 +292,7 @@ public class LoadProfile extends DialogPreference {
         getPreferenceManager().setSharedPreferencesName(ProfileFragment.NAME_SHARED_FILE_PROFILE);
         SharedPreferences sp = getPreferenceManager().getSharedPreferences();
         myValue = sp.getString(getKey(), mDefault);
+        //Log.d("Value", myValue);
         String[] tabValues = myValue.split(";");
         Profile profile = new Profile(tabValues);
         return profile;
@@ -313,7 +330,7 @@ public class LoadProfile extends DialogPreference {
         getEditor().putString("currentKey",getKey()).apply();
         //this.setTitle(title);
         myValue = value;
-        Log.d("SAVE", value);
+        //Log.d("SAVE", value);
     }
 
     /**

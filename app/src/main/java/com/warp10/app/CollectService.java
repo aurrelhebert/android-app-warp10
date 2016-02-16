@@ -55,6 +55,12 @@ public class CollectService extends Service {
     protected String url;
 
     /**
+     * Url to push data
+     */
+    protected String socketUrl;
+
+
+    /**
      * Authenticate write token
      */
     protected String token;
@@ -83,6 +89,19 @@ public class CollectService extends Service {
      * Application context
      */
     protected Context context;
+
+    /**
+     * Socket
+     */
+    protected static WebSocketDataListener ws;
+
+    /**
+     * boolean to tell whether Collect with Post/Websocket is Active
+     */
+    protected static boolean isPostActive;
+
+    protected static boolean isClosed;
+    //protected static WebSocketJetty webSocket;
 
     /**
      * Empty constructor
@@ -127,17 +146,19 @@ public class CollectService extends Service {
     private void startCollectService() {
         // Initialisation
         int limit;
-        context = getApplicationContext();
+        context = this;
         sensorService = new SensorService();
         locationService = new LocationService();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        this.url = sharedPreferences.getString("url", "NULL");
         this.token = sharedPreferences.getString("token", "NULL");
         this.prefixGts = sharedPreferences.getString("prefix", "NULL");
         List<String> sensorName = WarpActivity.getSensorsCheckedBefore(sharedPreferences);
         ArrayList<CharSequence> sensorNameList = new ArrayList<>();
         sensorNameList.addAll(sensorName);
         this.flushTime = Integer.valueOf(sharedPreferences.getString("flush", "60"));
+        this.isPostActive = sharedPreferences.getBoolean("postWS", true);
+        this.url = sharedPreferences.getString("url", "NULL");
+        this.socketUrl = sharedPreferences.getString("urlWS", "NULL");
         boolean useNet = sharedPreferences.getBoolean("useInternet", true);
         limit = Integer.valueOf(sharedPreferences.getString("limitSizeDisk", "100"));
         boolean mode = sharedPreferences.getBoolean("keepValues",false);
@@ -185,12 +206,31 @@ public class CollectService extends Service {
      * @param sensorNameList
      */
     private void startServices(ArrayList<CharSequence> sensorNameList) {
+        //String urlWebService = "wss://warp1.cityzendata.net/api/v0/streamupdate";
+        //String valToken = this.token;
+        if (!isPostActive) {
+            FileService.setContext(getApplicationContext());
+            ws = new WebSocketDataListener(this.socketUrl, this.token);
+            if (null != ws.getError()) {
+                FlushService.sendNotification(this,"Socket is closed", "An error occurred during the connection with the socket : " + ws.getError() + " Try to restart the collect.");
+            }
+            //ws.connectWebSocket();
+        }
+        /*webSocket = new WebSocketJetty(urlWebService,this.token);
+        try {
+            webSocket.connect();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+
+
         if(sensorNameList != null && !sensorNameList.isEmpty()) {
             for(CharSequence sensorName : sensorNameList) {
                 sensorService.startActionStart(context, sensorName.toString(), prefixGts);
             }
         }
         locationService.startActionStart(context, sensorNameList, prefixGts);
+        //FlushWithSocket.connectWebSocket(urlWebService,this.token);
     }
 
     /**
@@ -204,6 +244,11 @@ public class CollectService extends Service {
             Intent intent = new Intent(context, LocationService.class);
             stopService(intent);
         }
+        if(!isPostActive) {
+            FileService.setContext(getApplicationContext());
+            CollectService.ws.closeWebSocket();
+        }
+        //webSocket.closeSockets();
     }
 
     /**
@@ -261,7 +306,7 @@ public class CollectService extends Service {
      */
     public void onDestroy () {
         // update context
-        context = getApplicationContext();
+        context = this;
         if(isRunning)
         {
             // Stop timer

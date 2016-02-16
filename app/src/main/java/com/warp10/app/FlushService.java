@@ -76,6 +76,7 @@ public class FlushService {
                        //String txt = FileService.readFile(tmpFile);
                        //Log.d("FLUSH THREAD", warpUrl);
                        //FileService.writeLogFile("File: " + tmpFile.getName() + "\n");
+
                        if (postData(tmpFile, warpUrl, warpToken)) {
                            tmpFile.delete();
                        } else {
@@ -267,7 +268,7 @@ public class FlushService {
             con.setRequestMethod("POST");
             con.setDoInput(true);
             con.setDoOutput(true);
-            con.setRequestProperty("X-Warp10-Token", token);
+            con.setRequestProperty("X-CityzenData-Token", token);
             con.setRequestProperty("Content-Type", "application/gzip");
             con.setChunkedStreamingMode(16384);
 

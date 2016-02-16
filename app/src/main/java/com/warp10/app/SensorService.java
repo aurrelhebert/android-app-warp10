@@ -33,6 +33,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Pair;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -120,6 +121,7 @@ public class SensorService extends IntentService implements SensorEventListener 
 
 
 
+
     /**
      * Connection with the location Service
      */
@@ -200,6 +202,7 @@ public class SensorService extends IntentService implements SensorEventListener 
                 .getDefaultSharedPreferences(this);
         initialiseHashMap(sharedPrefs);
         createMapSensorType();
+        //wsDL = new WebSocketDataListener(sharedPrefs.getString("url", "NULL"),sharedPrefs.getString("token", "NULL"));
     }
 
     protected void setUpMap()
@@ -429,6 +432,15 @@ public class SensorService extends IntentService implements SensorEventListener 
             //Log.d("SensorService", stringBuffer.toString());
             final StringBuffer buffer = new StringBuffer(stringBuffer);
             FileService.writeToFile(buffer.toString(), this);
+            if (!CollectService.isPostActive) {
+                if(!CollectService.ws.isClosed()) {
+                        CollectService.ws.writeData(buffer.toString());
+                }
+            }
+            //FlushWithSocket.writeValues(buffer.toString());
+            //Log.d("Buffer", buffer.toString());
+
+            //CollectService.webSocket.writeMessage(buffer.toString());
             stringBuffer = new StringBuffer();
         }
     }
