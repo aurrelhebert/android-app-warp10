@@ -110,6 +110,7 @@ public class SensorService extends IntentService implements SensorEventListener 
     private static final String EXTRA_URL = "com.cityzendata.warpapp.extra.URL";
     private static final String EXTRA_TOKEN = "com.cityzendata.warpapp.extra.TOKEN";
     private static final String EXTRA_FLUSH = "com.cityzendata.warpapp.extra.FLUSH";
+    private static final String EXTRA_SENSORTIME = "com.cityzendata.warpapp.extra.SENSORTIME";
 
     // Sensor Manager to detect captors to collect data
     private SensorManager mSensorManager = null;
@@ -184,16 +185,17 @@ public class SensorService extends IntentService implements SensorEventListener 
             } else if (ACTION_STARTB.equals(action)) {
                 final String sensorName = intent.getStringExtra(EXTRA_SENSORS);
                 final String prefixGTS = intent.getStringExtra(EXTRA_PREFIX);
-                handleActionStartB(sensorName, prefixGTS);
+                final int sensorTime = intent.getIntExtra(EXTRA_SENSORTIME, 10);
+                handleActionStartB(sensorName, prefixGTS, sensorTime);
             }
         }
     }
 
-    private void handleActionStartB(String sensorName, String prefixGTS) {
+    private void handleActionStartB(String sensorName, String prefixGTS, int sensorTime) {
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (mSensorManager != null) {
             setUpMap();
-            registerListeners(sensorName);
+            registerListeners(sensorName, sensorTime);
         }
         Log.d("SensorService", "Action START");
         shouldContinue = true;
@@ -480,15 +482,21 @@ public class SensorService extends IntentService implements SensorEventListener 
      * Method registering listener on a sensor
      * @param sensor sensor name
      */
-    private void registerListeners(String sensor) {
+    private void registerListeners(String sensor, int time) {
         if(sensorMap.containsKey(sensor))
         {
+            /**
+             * For new version android >= 20
+             */
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                mSensorManager.registerListener(this, sensorMap.get(sensor), SensorManager.SENSOR_DELAY_NORMAL, 1000*60);
+                mSensorManager.registerListener(this, sensorMap.get(sensor), SensorManager.SENSOR_DELAY_NORMAL, time*1000*1000);
                 mSensorManager.flush(this);
             }
             else
             {
+                /**
+                 * For old version android <= 20
+                 */
                 mSensorManager.registerListener(this, sensorMap.get(sensor), SensorManager.SENSOR_DELAY_NORMAL);
             }
         }
@@ -500,11 +508,12 @@ public class SensorService extends IntentService implements SensorEventListener 
      * @param sensorName sensor name
      * @param prefGts user choice of GTS prefix
      */
-    public void startActionStart(Context context, String sensorName, String prefGts) {
+    public void startActionStart(Context context, String sensorName, String prefGts, int sensorTime) {
         Intent intent = new Intent(context, SensorService.class);
         intent.setAction(ACTION_STARTB);
         intent.putExtra(EXTRA_SENSORS, sensorName);
         intent.putExtra(EXTRA_PREFIX, prefGts);
+        intent.putExtra(EXTRA_SENSORTIME, sensorTime);
         context.startService(intent);
     }
 
