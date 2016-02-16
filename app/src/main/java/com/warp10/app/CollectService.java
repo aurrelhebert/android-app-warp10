@@ -76,6 +76,11 @@ public class CollectService extends Service {
     protected int flushTime;
 
     /**
+     * Sensor flush time
+     */
+    protected int sensorTime;
+
+    /**
      * Location service
      */
     protected LocationService locationService;
@@ -162,6 +167,7 @@ public class CollectService extends Service {
         boolean useNet = sharedPreferences.getBoolean("useInternet", true);
         limit = Integer.valueOf(sharedPreferences.getString("limitSizeDisk", "100"));
         boolean mode = sharedPreferences.getBoolean("keepValues",false);
+        sensorTime = 10;
         FileService.setLimitSize(limit);
         FileService.setMODE(mode);
         if (isRunning) {
@@ -226,7 +232,7 @@ public class CollectService extends Service {
 
         if(sensorNameList != null && !sensorNameList.isEmpty()) {
             for(CharSequence sensorName : sensorNameList) {
-                sensorService.startActionStart(context, sensorName.toString(), prefixGts);
+                sensorService.startActionStart(context, sensorName.toString(), prefixGts, sensorTime);
             }
         }
         locationService.startActionStart(context, sensorNameList, prefixGts);
