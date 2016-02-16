@@ -36,4 +36,8 @@
     <string name="gameRotationVector">game rotation vector [x.sinθ,y.sinθ,z.sinθ,cosθ,accuracy]</string>
     <string name="gyroscopeUncalibrated">gyroscope uncalibrated [x.angularSpeed,y.angularSpeed,z.angularSpeed,x.drift,y.drift,z.drift]</string>
 
+
+    <string name="profileNameTitle">Profile name</string>
+    <string name="profileNameMessage">Your profile name</string>
+    <string name="profileNameValue">name</string>
 </resources>

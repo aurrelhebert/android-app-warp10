@@ -24,7 +24,7 @@ import android.os.Bundle;
  * Activity used to show on screen the main setting page (ToolBar)
  * See SettingsFragment for more details
  * */
-public class SetPreferenceActivity extends Activity {
+public class SetPreferenceActivity extends Activity  {
 
     @Override
     /**

@@ -96,7 +96,12 @@ public class AddSensorPreference extends DialogPreference {
                 EditText title = (EditText) myView.findViewById(com.warp10.app.R.id.currentSensorTitle);
                 EditText value = (EditText) myView.findViewById(com.warp10.app.R.id.currentSensorValue);
                 String myValue = title.getText().toString() + " [" + value.getText().toString() + "]";
-                sensorPreference.saveValue(myValue, title.getText().toString());
+                getPreferenceManager().setSharedPreferencesName(SensorsFragment.NAME_SHARED_FILE_SENSORS);
+                SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
+                //Log.d("" + countValue, myValue);
+                sharedPreferences.edit().putString(sensorPreference.getKey(), myValue).apply();
+                sensorPreference.setTitle(title.getText().toString());
+                //getPreferenceManager().setSharedPreferencesName(SensorsFragment.NAME_SHARED_FILE_SENSORS);
                 PreferenceScreen preferenceScreen = (PreferenceScreen) getPreferenceManager().findPreference("sensorPrefScreen");
                 preferenceScreen.addPreference(sensorPreference);
                 getDialog().dismiss();
@@ -133,7 +138,8 @@ public class AddSensorPreference extends DialogPreference {
         super.onPrepareDialogBuilder(builder);
         builder.setPositiveButton(null, null);
         builder.setNegativeButton(null, null);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+        getPreferenceManager().setSharedPreferencesName(SensorsFragment.NAME_SHARED_FILE_SENSORS);
+        SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
         while (sharedPreferences.contains("" + count)){
             count++;
         }

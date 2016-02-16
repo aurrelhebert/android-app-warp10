@@ -24,6 +24,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.DialogPreference;
 import android.preference.Preference;
+import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.util.AttributeSet;
@@ -203,6 +204,7 @@ public class SensorPreference extends DialogPreference {
             @Override
             public void onClick(View v) {
                 //TODO Add a dialog Are you sure ?
+                getPreferenceManager().setSharedPreferencesName(SensorsFragment.NAME_SHARED_FILE_SENSORS);
                 Preference preference = getPreferenceManager().findPreference(getKey());
                 PreferenceScreen preferenceScreen = (PreferenceScreen) getPreferenceManager().findPreference("sensorPrefScreen");
                 preferenceScreen.removePreference(preference);
@@ -218,6 +220,7 @@ public class SensorPreference extends DialogPreference {
      */
     protected SensorDescription getValue() {
         //PreferenceManager.setDefaultValues(getContext(), getKey(),  Context.MODE_PRIVATE, R.xml.sensors, false);
+        getPreferenceManager().setSharedPreferencesName(SensorsFragment.NAME_SHARED_FILE_SENSORS);
         myValue = getSharedPreferences().getString(getKey(), mDefault);
         Pair<String,String> pair = parseValue(myValue);
         return new SensorDescription(pair.first, pair.second);
@@ -250,14 +253,15 @@ public class SensorPreference extends DialogPreference {
      */
     protected void saveValue(String value, String title) {
         if(null == attr) {
-            SharedPreferences sharedPreferences = PreferenceManager
-                    .getDefaultSharedPreferences(getContext());
+            getPreferenceManager().setSharedPreferencesName(SensorsFragment.NAME_SHARED_FILE_SENSORS);
+            SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
             //sharedPreferences.edit().putString(getKey(), value).commit();
             sharedPreferences.edit().putString(getKey(), value).apply();
             setTitle(title);
             //editor.apply();
             return;
         }
+        getPreferenceManager().setSharedPreferencesName(SensorsFragment.NAME_SHARED_FILE_SENSORS);
         SensorPreference pref = (SensorPreference) getPreferenceManager().findPreference(getKey());
         pref.setTitle(title);
         //getPreferenceManager().setSharedPreferencesName(getKey());
@@ -360,6 +364,7 @@ public class SensorPreference extends DialogPreference {
     protected void onSetInitialValue(boolean restore, Object defaultValue)
     {
         myValue = (restore ? getPersistedString(mDefault) : (String) defaultValue);
+        getPreferenceManager().setSharedPreferencesName(SensorsFragment.NAME_SHARED_FILE_SENSORS);
         if(!getSharedPreferences().contains(getKey())){
             getSharedPreferences().edit().putString(getKey(),myValue).apply();
         }

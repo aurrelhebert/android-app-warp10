@@ -104,6 +104,7 @@ public class NewProfile extends AppCompatActivity {
                         replaceAll(";", "_")).apply();
                 sharedPreferences.edit().putString("checkedGTS","[]").apply();
                 sharedPreferences.edit().putString("urlWS", socketUrl.getText().toString()).apply();
+                sharedPreferences.edit().putString("profileName",name.getText().toString().replaceAll(";","_")).apply();
 
                 sp.edit().putString("currentKey","" + countValue).apply();
                 //profile.getPreferenceManager().setSharedPreferencesName("profile");

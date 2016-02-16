@@ -34,10 +34,9 @@ import java.util.Map;
 public class SensorsFragment extends PreferenceFragment {
 
     /**
-     * All the sharedPreferences not related to sensors description
+     * File Name to store SharedPreferences related to sensors
      */
-    public static List<String> preferencesList = Arrays.asList("checkedGTS", "token", "url", "isActive", "useInternet",
-            "prefix", "flush", "keepValues", "limitSizeDisk", "urlWS", "postWS");
+    protected static String NAME_SHARED_FILE_SENSORS = "sensors";
 
     /**
      * Method on Create
@@ -49,10 +48,11 @@ public class SensorsFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getPreferenceManager().setSharedPreferencesName(NAME_SHARED_FILE_SENSORS);
         // Load the preferences from an XML resource
         addPreferencesFromResource(com.warp10.app.R.xml.sensors);
 
-        List<String> lString = preferencesList;
+        //List<String> lString = preferencesList;
         PreferenceScreen myPreferenceScreen = getPreferenceScreen();
 
         /**
@@ -70,32 +70,32 @@ public class SensorsFragment extends PreferenceFragment {
             /**
              * If the preferences is related to the sensor description
              */
-            if(!lString.contains(pref))
-            {
-                //Log.d("PREF", pref.toString());
+            //if(!lString.contains(pref))
+            //{
+            //Log.d("PREF", pref.toString());
+            /**
+             * Get the preference
+             */
+            SensorPreference myPref = (SensorPreference) getPreferenceManager().findPreference(pref);
+            /**
+             * If the preference doesn't exist (a preference added manually by the user
+             */
+            if(myPref == null ) {
                 /**
-                 * Get the preference
+                 * Add it on the preference screen by creating a new sensorPreference
                  */
-                SensorPreference myPref = (SensorPreference) getPreferenceManager().findPreference(pref);
+                myPref = new SensorPreference(myPreferenceScreen.getContext(), null,
+                        sharedPreferences.getString(pref,"NULL"), pref);
+                //Log.d("PREF + VALUE", myPref.toString() + " " + sharedPreferences.getString(pref, "NULL"));
+                myPreferenceScreen.addPreference(myPref);
+            } else {
                 /**
-                 * If the preference doesn't exist (a preference added manually by the user
+                 * Otherwise update it with user modification
                  */
-                if(myPref == null ) {
-                    /**
-                     * Add it on the preference screen by creating a new sensorPreference
-                     */
-                    myPref = new SensorPreference(myPreferenceScreen.getContext(), null,
-                            sharedPreferences.getString(pref,"NULL"), pref);
-                    //Log.d("PREF + VALUE", myPref.toString() + " " + sharedPreferences.getString(pref, "NULL"));
-                    myPreferenceScreen.addPreference(myPref);
-                } else {
-                    /**
-                     * Otherwise update it with user modification
-                     */
-                    String sensorDescription = sharedPreferences.getString(pref,"NULL [NULL]");
-                    myPref.setTitle(SensorPreference.parseValue(sensorDescription).first);
-                }
+                String sensorDescription = sharedPreferences.getString(pref,"NULL [NULL]");
+                myPref.setTitle(SensorPreference.parseValue(sensorDescription).first);
             }
+            //}
         }
 
         //SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);

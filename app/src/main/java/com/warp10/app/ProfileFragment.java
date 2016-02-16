@@ -14,6 +14,9 @@ import java.util.Map;
  */
 public class ProfileFragment extends PreferenceFragment {
 
+    /**
+     * File name to store profile shared preferences
+     */
     protected static String NAME_SHARED_FILE_PROFILE = "profile";
 
     public void onCreate(Bundle savedInstanceState) {

@@ -245,10 +245,11 @@ public class LoadProfile extends DialogPreference {
                         getDefaultSharedPreferences(getContext());
                 sharedPreferences.edit().putString("url",url.getText().toString()).apply();
                 sharedPreferences.edit().putString("token",token.getText().toString()).apply();
-                sharedPreferences.edit().putString("prefix",prefix.getText().toString().
+                sharedPreferences.edit().putString("prefix", prefix.getText().toString().
                         replaceAll(";", "_")).apply();
                 sharedPreferences.edit().putString("urlWS", socketUrl.getText().toString()).apply();
                 sharedPreferences.edit().putString("checkedGTS",profile.getAllCheckedGts()).apply();
+                sharedPreferences.edit().putString("profileName",name.getText().toString().replaceAll(";","_")).apply();
                 getDialog().dismiss();
                 Intent intent = new Intent(getContext(), WarpActivity.class);
                 getContext().startActivity(intent);

@@ -30,6 +30,7 @@ import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -187,6 +188,7 @@ public class WarpActivity extends AppCompatActivity implements SharedPreferences
         if(sharedPrefs.getBoolean("isActive", false)) {
             radioButton.setChecked(true);
         }
+        saveProfile();
     }
 
     /**
@@ -558,12 +560,12 @@ public class WarpActivity extends AppCompatActivity implements SharedPreferences
         String key = sp.getString("currentKey", "NULL");
         //Log.d("Key", key);
         if(!key.equals("NULL")) {
-            String name = LoadProfile.getName(sp.getString(key, "NULL"));
             SharedPreferences sharedPrefs = PreferenceManager
                     .getDefaultSharedPreferences(getApplicationContext());
             String url = sharedPrefs.getString("url", "NULL");
             String token = sharedPrefs.getString("token", "NULL");
             String socketUrl = sharedPrefs.getString("urlWS", "NULL");
+            String name = sharedPrefs.getString("profileName", "NULL");
             TextView settingsPrefix = (TextView) findViewById(com.warp10.app.R.id.prefixGTS);
             String prefix = settingsPrefix.getText().toString();
             ArrayList<CharSequence> sensorList = getAllCheckedSensors();

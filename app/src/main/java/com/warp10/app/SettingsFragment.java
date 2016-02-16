@@ -16,8 +16,10 @@
 
 package com.warp10.app;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 
@@ -40,6 +42,24 @@ public class SettingsFragment extends PreferenceFragment {
         addPreferencesFromResource(com.warp10.app.R.xml.preferences);
         PreferenceScreen myPreferenceScreen = getPreferenceScreen();
         Preference myPreference = myPreferenceScreen.findPreference("isActive");
+        PreferenceScreen profileScreen = (PreferenceScreen) getPreferenceManager().findPreference("profile_screen_key");
+        SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
+        profileScreen.setTitle(sharedPreferences.getString("profileName", "Profile settings"));
+        Preference preference = profileScreen.findPreference("profileName");
+        preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+            public boolean onPreferenceChange(Preference preference, Object newVal) {
+                final String value = (String) newVal;
+                PreferenceScreen myPreferenceScreen = getPreferenceScreen();
+                PreferenceScreen profileScreen = (PreferenceScreen) getPreferenceManager().findPreference("profile_screen_key");
+                PreferenceCategory preferenceCategory =(PreferenceCategory) myPreferenceScreen.findPreference("profile_settings");
+                preferenceCategory.removePreference(profileScreen);
+                profileScreen.setTitle(value);
+                preferenceCategory.addPreference(profileScreen);
+                return true;
+            }
+
+        });
         myPreferenceScreen.removePreference(myPreference);
         myPreference = myPreferenceScreen.findPreference("checkedGTS");
         myPreferenceScreen.removePreference(myPreference);

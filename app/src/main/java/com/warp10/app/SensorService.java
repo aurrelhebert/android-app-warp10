@@ -16,6 +16,7 @@
 
 package com.warp10.app;
 
+import android.app.Activity;
 import android.app.IntentService;
 import android.content.ComponentName;
 import android.content.Context;
@@ -200,8 +201,9 @@ public class SensorService extends IntentService implements SensorEventListener 
         Log.d("SensorService", "Action START");
         shouldContinue = true;
         this.prefixGTS = prefixGTS;
-        SharedPreferences sharedPrefs = PreferenceManager
-                .getDefaultSharedPreferences(this);
+        SharedPreferences sharedPrefs = this.getSharedPreferences(SensorsFragment.NAME_SHARED_FILE_SENSORS, Activity.MODE_PRIVATE);
+//        SharedPreferences sharedPrefs = PreferenceManager
+//                .getDefaultSharedPreferences(this);
         initialiseHashMap(sharedPrefs);
         createMapSensorType();
         //wsDL = new WebSocketDataListener(sharedPrefs.getString("url", "NULL"),sharedPrefs.getString("token", "NULL"));
@@ -525,18 +527,17 @@ public class SensorService extends IntentService implements SensorEventListener 
     private void initialiseHashMap(SharedPreferences sharedPreferences) {
         mapSensorDescription = new HashMap<>();
         Map<String, ?> keySet = sharedPreferences.getAll();
-        List<String> lString = SensorsFragment.preferencesList;
+        //List<String> lString = SensorsFragment.preferencesList;
         //Log.d("ALLPREF", lString.toString());
         for (String pref:keySet.keySet()) {
-            if (!lString.contains(pref)) {
-                String value = sharedPreferences.getString(pref, "NULL");
-                if(!value.equals("NULL")) {
-                    Pair<String, String> pair = SensorPreference.parseValue(value);
-                    String type = "android.sensor." + pair.first.replaceAll("\\s+", "_").toLowerCase();
-                    mapSensorDescription.put(type,pair.second);
-                }
-
+            //if (!lString.contains(pref)) {
+            String value = sharedPreferences.getString(pref, "NULL");
+            if(!value.equals("NULL")) {
+                Pair<String, String> pair = SensorPreference.parseValue(value);
+                String type = "android.sensor." + pair.first.replaceAll("\\s+", "_").toLowerCase();
+                mapSensorDescription.put(type,pair.second);
             }
+            //}
         }
     }
 

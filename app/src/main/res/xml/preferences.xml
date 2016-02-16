@@ -1,95 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="settingsScreen">
-    <EditTextPreference
-        android:id="@+id/url"
-        android:key="url"
-        android:title="@string/warpUrlTitle"
-        android:persistent="true"
-        android:dialogTitle="@string/warpUrlTitle"
-        android:dialogMessage="@string/warpUrlMessage"
-        android:defaultValue="@string/warpUrlValue" />
 
-    <EditTextPreference
-        android:id="@+id/urlWS"
-        android:key="urlWS"
-        android:title="@string/urlWSTitle"
-        android:persistent="true"
-        android:dialogTitle="@string/urlWSTitle"
-        android:dialogMessage="@string/urlWSMessage"
-        android:defaultValue="@string/urlWSValue" />
+    <PreferenceCategory
+        android:title="Profile Settings"
+        android:key="profile_settings">
 
-    <EditTextPreference
-        android:id="@+id/token"
-        android:key="token"
-        android:title="@string/tokenTitle"
-        android:persistent="true"
-        android:dialogTitle="@string/tokenTitle"
-        android:dialogMessage="@string/tokenMessage"
-        android:defaultValue="@string/tokenValue" />
+        <PreferenceScreen
+            android:key="profile_screen_key"
+            android:title="Profile settings"
+            android:persistent="false">
 
-    <EditTextPreference
-        android:id="@+id/prefix"
-        android:key="prefix"
-        android:title="@string/prefixGTSTitle"
-        android:persistent="true"
-        android:dialogTitle="@string/prefixGTSTitle"
-        android:dialogMessage="@string/prefixGTSMessage"
-        android:defaultValue="@string/prefixGTSValue" />
+            <EditTextPreference
+                android:id="@+id/profileName"
+                android:key="profileName"
+                android:title="@string/profileNameTitle"
+                android:persistent="true"
+                android:dialogTitle="@string/profileNameTitle"
+                android:dialogMessage="@string/profileNameMessage"
+                android:defaultValue="@string/profileNameValue" />
 
-    <EditTextPreference
-        android:inputType="number"
-        android:id="@+id/flush"
-        android:key="flush"
-        android:title="@string/flushTitle"
-        android:persistent="true"
-        android:dialogTitle="@string/flushTitle"
-        android:dialogMessage="@string/flushMessage"
-        android:defaultValue="@integer/flushValue" />
+            <EditTextPreference
+                android:id="@+id/url"
+                android:key="url"
+                android:title="@string/warpUrlTitle"
+                android:persistent="true"
+                android:dialogTitle="@string/warpUrlTitle"
+                android:dialogMessage="@string/warpUrlMessage"
+                android:defaultValue="@string/warpUrlValue" />
 
-    <CheckBoxPreference
-        android:id="@+id/useInternet"
-        android:key="useInternet"
-        android:title="Activate automatic post on internet during collect"
-        android:dialogMessage="@string/useInternetMessage"
-        android:defaultValue="true" />
+            <EditTextPreference
+                android:id="@+id/urlWS"
+                android:key="urlWS"
+                android:title="@string/urlWSTitle"
+                android:persistent="true"
+                android:dialogTitle="@string/urlWSTitle"
+                android:dialogMessage="@string/urlWSMessage"
+                android:defaultValue="@string/urlWSValue" />
 
-    <CheckBoxPreference
-        android:id="@+id/postWS"
-        android:key="postWS"
-        android:title="If true use POST, false use WebSocket"
-        android:defaultValue="true" />
+            <EditTextPreference
+                android:id="@+id/token"
+                android:key="token"
+                android:title="@string/tokenTitle"
+                android:persistent="true"
+                android:dialogTitle="@string/tokenTitle"
+                android:dialogMessage="@string/tokenMessage"
+                android:defaultValue="@string/tokenValue" />
 
-    <CheckBoxPreference
-        android:id="@+id/keepValues"
-        android:key="keepValues"
-        android:title="Keep more recent(true)/old(false) values"
-        android:text="@string/keepValuesMessage"
-        android:defaultValue="false" />
+            <EditTextPreference
+                android:id="@+id/prefix"
+                android:key="prefix"
+                android:title="@string/prefixGTSTitle"
+                android:persistent="true"
+                android:dialogTitle="@string/prefixGTSTitle"
+                android:dialogMessage="@string/prefixGTSMessage"
+                android:defaultValue="@string/prefixGTSValue" />
 
-    <EditTextPreference
-        android:inputType="number"
-        android:id="@+id/limitSizeDisk"
-        android:key="limitSizeDisk"
-        android:title="@string/limitSizeTitle"
-        android:persistent="true"
-        android:dialogTitle="@string/limitSizeTitle"
-        android:dialogMessage="@string/limitSizeMessage"
-        android:defaultValue="@integer/limitSizeValue" />
+        </PreferenceScreen>
+    </PreferenceCategory>
 
-    <CheckBoxPreference
-        android:id="@+id/isActive"
-        android:key="isActive"
-        android:selectable="false"
-        android:title="Is collect active"
-        android:defaultValue="false" />
+    <PreferenceCategory
+        android:title="System Settings"
+        android:key="system_settings">
+        <EditTextPreference
+            android:inputType="number"
+            android:id="@+id/flush"
+            android:key="flush"
+            android:title="@string/flushTitle"
+            android:persistent="true"
+            android:dialogTitle="@string/flushTitle"
+            android:dialogMessage="@string/flushMessage"
+            android:defaultValue="@integer/flushValue" />
 
-    <EditTextPreference
-        android:id="@+id/checkedGTS"
-        android:key="checkedGTS"
-        android:title="@string/checkedGTSTitle"
-        android:dialogTitle="@string/checkedGTSTitle"
-        android:dialogMessage="@string/checkedGTSMessage"
-        android:defaultValue="@string/checkedGTSValue" />
+        <CheckBoxPreference
+            android:id="@+id/useInternet"
+            android:key="useInternet"
+            android:title="Activate automatic post on internet during collect"
+            android:dialogMessage="@string/useInternetMessage"
+            android:defaultValue="true" />
+
+        <CheckBoxPreference
+            android:id="@+id/postWS"
+            android:key="postWS"
+            android:title="If true use POST, false use WebSocket"
+            android:defaultValue="true" />
+
+        <CheckBoxPreference
+            android:id="@+id/keepValues"
+            android:key="keepValues"
+            android:title="Keep more recent(true)/old(false) values"
+            android:text="@string/keepValuesMessage"
+            android:defaultValue="false" />
+
+        <EditTextPreference
+            android:inputType="number"
+            android:id="@+id/limitSizeDisk"
+            android:key="limitSizeDisk"
+            android:title="@string/limitSizeTitle"
+            android:persistent="true"
+            android:dialogTitle="@string/limitSizeTitle"
+            android:dialogMessage="@string/limitSizeMessage"
+            android:defaultValue="@integer/limitSizeValue" />
+
+        <CheckBoxPreference
+            android:id="@+id/isActive"
+            android:key="isActive"
+            android:selectable="false"
+            android:title="Is collect active"
+            android:defaultValue="false" />
+
+        <EditTextPreference
+            android:id="@+id/checkedGTS"
+            android:key="checkedGTS"
+            android:title="@string/checkedGTSTitle"
+            android:dialogTitle="@string/checkedGTSTitle"
+            android:dialogMessage="@string/checkedGTSMessage"
+            android:defaultValue="@string/checkedGTSValue" />
+    </PreferenceCategory>
 
 </PreferenceScreen>
