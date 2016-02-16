@@ -170,9 +170,10 @@ public class WarpActivity extends AppCompatActivity implements SharedPreferences
 
         builder.append("\n" + sharedPrefs.getString("url", "NULL"));
 
-        builder.append("\n  To change this value, and set up your authentication token, go in the application setting");
+        builder.append("\n  To edit the sytem settings (Flush time, file management, use of WebSocket) go in the application setting");
 
-        builder.append("\n  Choose a prefix for yours GTS, which is added to the sensors name to construct the GTS name and finally check which sensors will record data that are available on your phone : ");
+        builder.append("\n  Choose a prefix for yours GTS, which is added to the sensors name to construct the GTS name and finally check which sensors will record data that are available on your phone." +
+                "\n  Starting a collect, clicking on save profile or editing your profile (via Menu/settings) will save the the current profile state and save all the current checked sensors (linked with the profile.");
 
         TextView settingsTextView = (TextView) findViewById(com.warp10.app.R.id.textView);
 

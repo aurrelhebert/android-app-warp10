@@ -72,6 +72,16 @@
             android:dialogMessage="@string/flushMessage"
             android:defaultValue="@integer/flushValue" />
 
+        <EditTextPreference
+            android:inputType="number"
+            android:id="@+id/sensorFlush"
+            android:key="sensorFlush"
+            android:title="@string/sensorFlushTitle"
+            android:persistent="true"
+            android:dialogTitle="@string/sensorFlushTitle"
+            android:dialogMessage="@string/sensorFlushMessage"
+            android:defaultValue="@integer/sensorFlushValue" />
+
         <CheckBoxPreference
             android:id="@+id/useInternet"
             android:key="useInternet"

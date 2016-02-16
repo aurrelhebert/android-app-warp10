@@ -40,4 +40,6 @@
     <string name="profileNameTitle">Profile name</string>
     <string name="profileNameMessage">Your profile name</string>
     <string name="profileNameValue">name</string>
+    <string name="sensorFlushTitle">Sensor Flush Time</string>
+    <string name="sensorFlushMessage">Time between to flush on the Sensor level in seconds</string>
 </resources>

@@ -13,12 +13,15 @@ import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 /**
  * Created by ahebert on 2/12/16.
@@ -213,10 +216,15 @@ public class LoadProfile extends DialogPreference {
         socketUrl.setText(profile.getUrlSocket());
 
         /**
-         * Set token with token preference
+         * Don't print token
          */
+        TextView textToken = (TextView) view.findViewById(R.id.currentProfileDescriptionToken);
+        textToken.setText(Html.fromHtml("<br/>Token can't be modified here. To change its value, use " + "<b>" + "Menu/Settings/" + "</b> " +
+                " and change the value inside your profile configuration. <br/>"));
         EditText edTok = (EditText) view.findViewById(R.id.currentProfileToken);
-        edTok.setText(profile.getToken());
+        ViewGroup layout = (ViewGroup) edTok.getParent();
+        if(null!=layout)
+            layout.removeView(edTok);
 
         /**
          * Set prefix with prefix preference
@@ -233,23 +241,22 @@ public class LoadProfile extends DialogPreference {
             public void onClick(View v) {
                 EditText name = (EditText) myView.findViewById(R.id.currentProfileName);
                 EditText url = (EditText) myView.findViewById(R.id.currentProfileUrl);
-                EditText token = (EditText) myView.findViewById(R.id.currentProfileToken);
                 EditText prefix = (EditText) myView.findViewById(R.id.currentProfilePrefix);
                 EditText socketUrl = (EditText) myView.findViewById(R.id.currentProfileUrlSocket);
                 myValue = name.getText().toString().replaceAll(";","_") + ";" + url.getText().toString() + ";" +
-                        token.getText().toString() + ";" + prefix.getText().toString().replaceAll(";","_") + ";" +
+                        profile.getToken() + ";" + prefix.getText().toString().replaceAll(";","_") + ";" +
                         profile.getAllCheckedGts() + ";" + socketUrl.getText().toString();
                 saveValue(myValue, name.getText().toString().replaceAll(";", "_"));
 
                 SharedPreferences sharedPreferences = PreferenceManager.
                         getDefaultSharedPreferences(getContext());
                 sharedPreferences.edit().putString("url",url.getText().toString()).apply();
-                sharedPreferences.edit().putString("token",token.getText().toString()).apply();
+                sharedPreferences.edit().putString("token", profile.getToken());
                 sharedPreferences.edit().putString("prefix", prefix.getText().toString().
                         replaceAll(";", "_")).apply();
                 sharedPreferences.edit().putString("urlWS", socketUrl.getText().toString()).apply();
                 sharedPreferences.edit().putString("checkedGTS",profile.getAllCheckedGts()).apply();
-                sharedPreferences.edit().putString("profileName",name.getText().toString().replaceAll(";","_")).apply();
+                sharedPreferences.edit().putString("profileName", name.getText().toString().replaceAll(";", "_")).apply();
                 getDialog().dismiss();
                 Intent intent = new Intent(getContext(), WarpActivity.class);
                 getContext().startActivity(intent);

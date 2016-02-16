@@ -167,7 +167,7 @@ public class CollectService extends Service {
         boolean useNet = sharedPreferences.getBoolean("useInternet", true);
         limit = Integer.valueOf(sharedPreferences.getString("limitSizeDisk", "100"));
         boolean mode = sharedPreferences.getBoolean("keepValues",false);
-        sensorTime = 10;
+        this.sensorTime = Integer.valueOf(sharedPreferences.getString("sensorFlush", "10"));
         FileService.setLimitSize(limit);
         FileService.setMODE(mode);
         if (isRunning) {
