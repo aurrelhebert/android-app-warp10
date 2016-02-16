@@ -281,6 +281,11 @@ public class CollectService extends Service {
         }
     }
 
+    /**
+     * Set flush Time (files management)
+     * @param flushTime Time in seconds
+     * @return
+     */
     private int setFlushTime(int flushTime) {
         if (flushTime < 60)
         {

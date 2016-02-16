@@ -19,6 +19,7 @@ import android.widget.EditText;
 
 /**
  * Created by ahebert on 2/12/16.
+ * Activity page to create a new Profile on Warp10 app
  */
 public class NewProfile extends AppCompatActivity {
 
@@ -39,31 +40,31 @@ public class NewProfile extends AppCompatActivity {
         // View
 
         /**
-         * Set null on name
+         * Set initial name
          */
         EditText edName = (EditText) findViewById(R.id.currentProfileName);
         edName.setText("name");
 
         /**
-         * Set null on Url
+         * Set initial Url
          */
         EditText edUrl = (EditText) findViewById(R.id.currentProfileUrl);
         edUrl.setText("Warp10Url");
 
         /**
-         * Set null on UrlSocket
+         * Set initial UrlSocket
          */
         EditText edSocket = (EditText) findViewById(R.id.currentProfileUrlSocket);
         edSocket.setText("none");
 
         /**
-         * Set null on Token
+         * Set initial Token
          */
         EditText edTok = (EditText) findViewById(R.id.currentProfileToken);
         edTok.setText("token");
 
         /**
-         * Set null on value
+         * Set initial prefix
          */
         EditText edPref = (EditText) findViewById(R.id.currentProfilePrefix);
         edPref.setText("android");
@@ -71,7 +72,7 @@ public class NewProfile extends AppCompatActivity {
         Button okButton = (Button) findViewById(R.id.profileOk);
 
         /**
-         * Save new title and value to create a new sensor preference
+         * Save new profile preference and its associated value
          */
         final Context ctx = this;
         okButton.setOnClickListener(new View.OnClickListener() {
@@ -130,7 +131,7 @@ public class NewProfile extends AppCompatActivity {
         });
 
         /**
-         * Do not put on screen the delete button wich exist in the layout sensor
+         * Do not put on screen the delete button which exist in the layout sensor
          */
         Button deleteButton = (Button) findViewById(R.id.profileDelete);
         ViewGroup layout = (ViewGroup) deleteButton.getParent();

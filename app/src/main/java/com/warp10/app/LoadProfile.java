@@ -22,6 +22,7 @@ import android.widget.EditText;
 
 /**
  * Created by ahebert on 2/12/16.
+ * LoadProfile correspond to a Preference
  */
 public class LoadProfile extends DialogPreference {
 
@@ -95,22 +96,22 @@ public class LoadProfile extends DialogPreference {
     }
 
     /**
-     * Value stored in shared preference : name [value]
+     * Value stored in shared preference : name;url;token;prefix;listCheckedSensors;socketUrl
      */
     String myValue = "";
 
     /**
-     * Sensor description associated to the current sensor preference
+     * Profile description associated to the current profile preference
      */
     Profile profile;
 
     /**
      * Value by default
      */
-    String mDefault = "null [null]";
+    String mDefault = "null";
 
     /**
-     * attribute set of the current preference
+     * attribute set of the current profile
      */
     AttributeSet attr;
 
@@ -168,7 +169,7 @@ public class LoadProfile extends DialogPreference {
     /**
      * Function used to prepare the dialog
      * Delete positive and negative buttons of the view
-     * Set the title of the dialog with current preference title
+     * Set the title of the dialog with current profile name
      * @param builder view builder
      */
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
@@ -180,11 +181,11 @@ public class LoadProfile extends DialogPreference {
 
     /**
      * When clicked open a dialog containing the layout current profile
-     * Set current title and value with preferences title and value
+     * Set current name, url ... with preferences values
      * Add 3 buttons save, cancel and delete
-     * On save, update and register current sensor preference
+     * On save, update and register current profile preference
      * On cancel, do nothing
-     * On delete, delete current preference
+     * On delete, delete current profile
      * @param view
      */
     public void onBindDialogView(View view) {
@@ -194,37 +195,37 @@ public class LoadProfile extends DialogPreference {
         profile = getValue();
 
         /**
-         * Set title with title preference
+         * Set name with name preference
          */
         EditText edName = (EditText) view.findViewById(R.id.currentProfileName);
         edName.setText(profile.getName());
 
         /**
-         * Set value with value preference
+         * Set url with url preference
          */
         EditText edUrl = (EditText) view.findViewById(R.id.currentProfileUrl);
         edUrl.setText(profile.getUrl());
 
         /**
-         * Set value with value preference
+         * Set socketUrl with socketUrl preference
          */
         EditText socketUrl = (EditText) view.findViewById(R.id.currentProfileUrlSocket);
         socketUrl.setText(profile.getUrlSocket());
 
         /**
-         * Set title with title preference
+         * Set token with token preference
          */
         EditText edTok = (EditText) view.findViewById(R.id.currentProfileToken);
         edTok.setText(profile.getToken());
 
         /**
-         * Set value with value preference
+         * Set prefix with prefix preference
          */
         EditText edPref = (EditText) view.findViewById(R.id.currentProfilePrefix);
         edPref.setText(profile.getPrefix());
 
         /**
-         * Update current title and value of sensor preference
+         * Update current current profile with preference's values
          */
         Button okButton = (Button) view.findViewById(R.id.profileOk);
         okButton.setOnClickListener(new View.OnClickListener() {
@@ -266,7 +267,7 @@ public class LoadProfile extends DialogPreference {
         });
 
         /**
-         * Delete current preference from preference screen and shared preference
+         * Delete current profile from preference screen and shared preference
          */
         Button deleteButton = (Button) view.findViewById(R.id.profileDelete);
         deleteButton.setOnClickListener(new View.OnClickListener() {
@@ -284,7 +285,7 @@ public class LoadProfile extends DialogPreference {
     }
 
     /**
-     * Get value of current preference in sharedPreference ("title [value]")
+     * Get value of current preference in sharedPreference
      * @return
      */
     protected Profile getValue() {
@@ -304,7 +305,7 @@ public class LoadProfile extends DialogPreference {
     }
 
     /**
-     * Save the modified value and title in shared preferences
+     * Save the modified value and title(name) in shared preferences
      * @param value
      * @param title
      */

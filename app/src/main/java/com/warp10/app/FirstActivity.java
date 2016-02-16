@@ -19,6 +19,7 @@ import android.widget.ImageView;
 
 /**
  * Created by ahebert on 2/11/16.
+ * Main frame activity
  */
 public class FirstActivity extends AppCompatActivity {
 
@@ -84,6 +85,10 @@ public class FirstActivity extends AppCompatActivity {
 //        imgButton.setImageBitmap(b);
     }
 
+    /**
+     * Click Handler for action Load a Profile
+     * @param view
+     */
     public void loadProfile(View view) {
         SharedPreferences sp = this.getSharedPreferences(ProfileFragment.NAME_SHARED_FILE_PROFILE, Activity.MODE_PRIVATE);
         if(sp.getAll().isEmpty()) {
@@ -119,6 +124,10 @@ public class FirstActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    /**
+     * Click handler for action New Profile
+     * @param view
+     */
     public void newProfile(View view) {
         Intent intent = new Intent(this, NewProfile.class);
         startActivity(intent);

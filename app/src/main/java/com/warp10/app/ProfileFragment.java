@@ -10,6 +10,7 @@ import java.util.Map;
 
 /**
  * Created by ahebert on 2/12/16.
+ * Profile Fragment loading the Load Profile Menu
  */
 public class ProfileFragment extends PreferenceFragment {
 
