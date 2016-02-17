@@ -41,11 +41,16 @@ public class SettingsFragment extends PreferenceFragment {
         // Load the preferences from an XML resource
         addPreferencesFromResource(com.warp10.app.R.xml.preferences);
         PreferenceScreen myPreferenceScreen = getPreferenceScreen();
-        Preference myPreference = myPreferenceScreen.findPreference("isActive");
+
+        // Load profile preference screen
         PreferenceScreen profileScreen = (PreferenceScreen) getPreferenceManager().findPreference("profile_screen_key");
         SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
+
+        // Set its title with current preference
         profileScreen.setTitle(sharedPreferences.getString("profileName", "Profile settings"));
         Preference preference = profileScreen.findPreference("profileName");
+
+        // Add a listener on case its modified
         preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
             public boolean onPreferenceChange(Preference preference, Object newVal) {
@@ -60,9 +65,14 @@ public class SettingsFragment extends PreferenceFragment {
             }
 
         });
-        myPreferenceScreen.removePreference(myPreference);
-        myPreference = myPreferenceScreen.findPreference("checkedGTS");
-        myPreferenceScreen.removePreference(myPreference);
+
+        // Remove isActive and checked GTS of the preference screen
+        PreferenceCategory preferenceCategory = (PreferenceCategory)
+                myPreferenceScreen.findPreference("system_settings");
+        Preference myPreference = preferenceCategory.findPreference("isActive");
+        preferenceCategory.removePreference(myPreference);
+        myPreference = preferenceCategory.findPreference("checkedGTS");
+        preferenceCategory.removePreference(myPreference);
         //SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         //String syncConnPref = sharedPref.getString(KEY_PREF_SYNC_CONN, "");
     }

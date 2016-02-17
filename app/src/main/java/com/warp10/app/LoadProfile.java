@@ -232,6 +232,7 @@ public class LoadProfile extends DialogPreference {
         EditText edPref = (EditText) view.findViewById(R.id.currentProfilePrefix);
         edPref.setText(profile.getPrefix());
 
+        Log.d("token1", profile.getToken());
         /**
          * Update current current profile with preference's values
          */
@@ -251,7 +252,7 @@ public class LoadProfile extends DialogPreference {
                 SharedPreferences sharedPreferences = PreferenceManager.
                         getDefaultSharedPreferences(getContext());
                 sharedPreferences.edit().putString("url",url.getText().toString()).apply();
-                sharedPreferences.edit().putString("token", profile.getToken());
+                sharedPreferences.edit().putString("token", profile.getToken()).apply();
                 sharedPreferences.edit().putString("prefix", prefix.getText().toString().
                         replaceAll(";", "_")).apply();
                 sharedPreferences.edit().putString("urlWS", socketUrl.getText().toString()).apply();

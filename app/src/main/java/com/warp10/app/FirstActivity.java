@@ -14,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -23,8 +25,11 @@ import android.widget.ImageView;
  */
 public class FirstActivity extends AppCompatActivity {
 
+    private Menu menu;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         // Set content view
         setContentView(R.layout.first_layout);
@@ -133,5 +138,28 @@ public class FirstActivity extends AppCompatActivity {
         startActivity(intent);
         //SharedPreferences sp = this.getSharedPreferences("profile", MODE_PRIVATE);
         //Log.d("Profile ?", sp.getAll().toString());
+    }
+
+    /**
+     * Initialize the Menu
+     * @param menu main menu of the application
+     * @return
+     */
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        //getMenuInflater().inflate(R.menu.menu_warp, menu);
+        getMenuInflater().inflate(R.menu.system_menu, menu);
+        this.menu = menu;
+        return true;
+    }
+
+    public void menuOnSysSettingsClick(MenuItem item) {
+        Intent settingsIntent = new Intent(this, SetSysPrefActivity.class);
+        startActivity(settingsIntent);
+    }
+
+    public void menuOnSensorsDesClick(MenuItem item) {
+        Intent settingsIntent = new Intent(FirstActivity.this, SetSensorsActivity.class);
+        FirstActivity.this.startActivity(settingsIntent);
     }
 }

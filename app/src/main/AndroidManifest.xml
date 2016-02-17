@@ -44,6 +44,10 @@
             android:label="@string/app_name" />
 
         <activity
+            android:name="com.warp10.app.SetSysPrefActivity"
+            android:label="@string/app_name" />
+
+        <activity
             android:name="com.warp10.app.SetLoadProfile"
             android:label="@string/app_name" />
         

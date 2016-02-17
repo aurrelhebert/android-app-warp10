@@ -19,7 +19,7 @@
     <string name="checkedGTSValue">[]</string>
     <string name="sensorsTitle">Sensors</string>
     <string name="keepValuesMessage">Choose a mode to keep value, keep recent value will delete the old one but also kept a buffer, when old will no longer record when the limit is reached</string>
-    <string name="limitSizeTitle"> Size limit on disk of this application</string>
+    <string name="limitSizeTitle"> Size limit on disk for this application</string>
     <string name="limitSizeMessage"> Choose the maximal size to allow write on disk of the application. 100 Mo is the minimal value.</string>
     <string name="urlWSTitle">Warp 10 Url for WebSocket</string>
     <string name="urlWSMessage">Enter the url for WebSocket of your application</string>
